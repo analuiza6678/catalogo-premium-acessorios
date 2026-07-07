@@ -7,6 +7,7 @@ import { AnimatedReveal } from "./AnimatedReveal";
 export function StoreStorySection({ loja }: { loja: Loja }) {
   const story = loja.sobre_loja || mockStore.sobre_loja!;
   const style = loja.estilo_loja || mockStore.estilo_loja!;
+  const storyImage = loja.sobre_imagem_url || loja.capa_url || fallbackImages[1];
   const values = [
     { icon: Gem, title: loja.diferencial_1 || mockStore.diferencial_1! },
     { icon: Gift, title: loja.diferencial_2 || mockStore.diferencial_2! },
@@ -20,7 +21,7 @@ export function StoreStorySection({ loja }: { loja: Loja }) {
         <div className="order-2 lg:order-1">
           <div className="relative mx-auto max-w-[520px] overflow-hidden rounded-[28px] border border-[#C9A24D]/14 bg-white/42 shadow-[0_28px_80px_rgba(80,55,25,0.12)]">
             <div className="relative aspect-[4/4.6]">
-              <Image src={loja.capa_url || fallbackImages[1]} alt={loja.nome} fill className="object-cover" />
+              <Image src={storyImage} alt={loja.nome} fill className="object-cover" />
             </div>
           </div>
         </div>

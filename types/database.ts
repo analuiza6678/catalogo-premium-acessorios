@@ -14,6 +14,8 @@ export type Database = {
           instagram: string | null;
           logo_url: string | null;
           capa_url: string | null;
+          capa_mobile_url: string | null;
+          sobre_imagem_url: string | null;
           cor_principal: string;
           cor_secundaria: string;
           ativa: boolean;

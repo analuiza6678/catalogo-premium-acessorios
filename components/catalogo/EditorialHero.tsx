@@ -12,6 +12,8 @@ import type { Produto } from "@/types/produto";
 
 export function EditorialHero({ loja }: { loja: Loja; products: Produto[] }) {
   const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Ola! Quero montar um pedido na ${loja.nome}.`);
+  const desktopCover = loja.capa_url || "/hero-jewelry-background.png";
+  const mobileCover = loja.capa_mobile_url || loja.capa_url || "/hero-jewelry-background.png";
 
   return (
     <section id="inicio" className="relative isolate -mt-16 overflow-hidden bg-[#FAF6EF] lg:-mt-[78px]">
@@ -27,14 +29,8 @@ export function EditorialHero({ loja }: { loja: Loja; products: Produto[] }) {
           transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0 z-[1] h-full w-full"
         >
-          <Image
-            src={loja.capa_url || "/hero-jewelry-background.png"}
-            alt={`Colecao ${loja.nome}`}
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-[72%_center] opacity-70 lg:object-top lg:opacity-100"
-          />
+          <Image src={mobileCover} alt={`Colecao ${loja.nome}`} fill priority sizes="100vw" className="object-cover object-[72%_center] opacity-70 lg:hidden" />
+          <Image src={desktopCover} alt={`Colecao ${loja.nome}`} fill priority sizes="100vw" className="hidden object-cover object-top lg:block" />
         </motion.div>
 
         <div className="pointer-events-none absolute inset-0 z-[2] bg-[linear-gradient(90deg,rgba(250,246,239,0.94)_0%,rgba(250,246,239,0.84)_42%,rgba(250,246,239,0.46)_72%,rgba(250,246,239,0.28)_100%)] lg:bg-[linear-gradient(90deg,rgba(250,246,239,0.34)_0%,rgba(250,246,239,0.22)_32%,rgba(250,246,239,0.06)_48%,rgba(250,246,239,0)_62%,rgba(250,246,239,0)_100%)]" />

@@ -159,6 +159,16 @@ Limite:
 
 As URLs publicas das imagens sao salvas nas tabelas `lojas` e `produtos`.
 
+## Imagens recomendadas
+
+- Logo: 800x800px
+- Capa desktop: 1920x900px ou 1600x800px
+- Capa mobile: 1080x1350px ou 1080x1600px
+- Sobre a loja: 1200x1400px ou 1000x1200px
+- Produtos: 1200x1200px
+- Formatos: JPG, PNG ou WEBP
+- Tamanho maximo: 5MB por imagem
+
 ## Deploy Recomendado
 
 Recomendacao: Vercel + Supabase.
