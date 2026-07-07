@@ -22,7 +22,6 @@ export function EditorialHero({ loja }: { loja: Loja; products: Produto[] }) {
             alt={`Coleção ${loja.nome}`}
             fill
             priority
-            unoptimized
             sizes="100vw"
             className="object-cover object-top"
           />

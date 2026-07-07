@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { CartButton } from "@/components/catalogo/CartButton";
 import { ProductDetails } from "@/components/catalogo/ProductDetails";
 import { ProductGrid } from "@/components/catalogo/ProductGrid";
@@ -13,6 +14,37 @@ import type { Loja } from "@/types/loja";
 import type { Produto } from "@/types/produto";
 
 export const revalidate = 60;
+
+export async function generateMetadata({ params }: { params: { slug: string; produtoSlug: string } }): Promise<Metadata> {
+  if (!hasSupabaseEnv()) return { title: "Produto" };
+
+  const supabase = createPublicClient();
+  const { data: loja } = await supabase.from("lojas").select("id,nome,descricao").eq("slug", params.slug).eq("ativa", true).single();
+  if (!loja) return { title: "Produto nao encontrado" };
+
+  const { data: produto } = await supabase
+    .from("produtos")
+    .select("nome,descricao,imagem_url")
+    .eq("loja_id", loja.id)
+    .eq("slug", params.produtoSlug)
+    .eq("ativo", true)
+    .single();
+
+  if (!produto) return { title: `${loja.nome} | Produto` };
+
+  const title = `${produto.nome} | ${loja.nome}`;
+  const description = produto.descricao || loja.descricao || "Produto disponivel para pedido pelo WhatsApp.";
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: produto.imagem_url ? [{ url: produto.imagem_url }] : undefined
+    }
+  };
+}
 
 export default async function ProductPage({ params }: { params: { slug: string; produtoSlug: string } }) {
   if (!hasSupabaseEnv()) return <SetupRequired />;
@@ -30,7 +62,7 @@ export default async function ProductPage({ params }: { params: { slug: string; 
     .eq("ativo", true)
     .single();
 
-  const mockProduto = mockProducts.find((item) => item.slug === params.produtoSlug) ?? null;
+  const mockProduto = process.env.NODE_ENV === "development" ? mockProducts.find((item) => item.slug === params.produtoSlug) ?? null : null;
   const produtoAtual = (produto ?? mockProduto) as Produto | null;
 
   if (!produtoAtual) notFound();
@@ -44,7 +76,7 @@ export default async function ProductPage({ params }: { params: { slug: string; 
     .eq("categoria_id", produto.categoria_id)
     .neq("id", produto.id)
     .limit(3)
-    : { data: mockProducts.filter((item) => item.categoria_id === produtoAtual.categoria_id && item.id !== produtoAtual.id).slice(0, 3) };
+    : { data: process.env.NODE_ENV === "development" ? mockProducts.filter((item) => item.categoria_id === produtoAtual.categoria_id && item.id !== produtoAtual.id).slice(0, 3) : [] };
 
   return (
     <main className="min-h-screen bg-white">

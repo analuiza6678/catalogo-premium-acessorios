@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Eye, Heart, ShoppingBag, Sparkles } from "lucide-react";
+import { Eye, ShoppingBag, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
@@ -25,6 +25,10 @@ export function PremiumProductCard({ lojaSlug, produto, preview, compact }: Prem
   const badge = produto.badge || (isKit ? "Kit" : produto.destaque ? "Destaque" : null);
 
   function addToCart() {
+    if (process.env.NODE_ENV === "production" && produto.id.startsWith("mock-")) {
+      toast.error("Este produto ainda nao esta disponivel para pedido.");
+      return;
+    }
     addItem({ id: produto.id, nome: produto.nome, slug: produto.slug, preco: price, imagem_url: produto.imagem_url });
     toast.success(preview ? "Produto de exemplo adicionado ao carrinho." : "Produto adicionado ao carrinho.");
   }
@@ -44,9 +48,6 @@ export function PremiumProductCard({ lojaSlug, produto, preview, compact }: Prem
             {badge}
           </motion.span>
         ) : null}
-        <button className="absolute right-3 top-3 grid size-10 place-items-center rounded-full bg-white/80 text-[#3A2A24] shadow backdrop-blur" aria-label="Favoritar visual">
-          <Heart size={17} />
-        </button>
         <div className="absolute inset-x-3 bottom-3 translate-y-4 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
           <div className="grid gap-2 rounded-[22px] bg-white/86 p-2 shadow-[0_18px_50px_rgba(58,42,36,0.16)] backdrop-blur sm:grid-cols-2">
             {preview ? (

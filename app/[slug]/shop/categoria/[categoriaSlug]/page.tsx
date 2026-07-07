@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { CartButton } from "@/components/catalogo/CartButton";
 import { CategoryTabs } from "@/components/catalogo/CategoryTabs";
 import { ProductGrid } from "@/components/catalogo/ProductGrid";
@@ -12,6 +13,38 @@ import type { Loja } from "@/types/loja";
 import type { Produto } from "@/types/produto";
 
 export const revalidate = 60;
+
+export async function generateMetadata({ params }: { params: { slug: string; categoriaSlug: string } }): Promise<Metadata> {
+  if (!hasSupabaseEnv()) return { title: "Categoria" };
+
+  const supabase = createPublicClient();
+  const { data: loja } = await supabase.from("lojas").select("id,nome,descricao,capa_url,logo_url").eq("slug", params.slug).eq("ativa", true).single();
+  if (!loja) return { title: "Categoria nao encontrada" };
+
+  const { data: categoria } = await supabase
+    .from("categorias")
+    .select("nome,descricao")
+    .eq("loja_id", loja.id)
+    .eq("slug", params.categoriaSlug)
+    .eq("ativa", true)
+    .single();
+
+  if (!categoria) return { title: `${loja.nome} | Categoria` };
+
+  const title = `${categoria.nome} | ${loja.nome}`;
+  const description = categoria.descricao || loja.descricao || "Produtos selecionados para pedido pelo WhatsApp.";
+  const image = loja.capa_url || loja.logo_url || undefined;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: image ? [{ url: image }] : undefined
+    }
+  };
+}
 
 export default async function CategoryPage({ params }: { params: { slug: string; categoriaSlug: string } }) {
   if (!hasSupabaseEnv()) return <SetupRequired />;

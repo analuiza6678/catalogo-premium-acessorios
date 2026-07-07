@@ -24,6 +24,10 @@ export function CartDrawer({ open, onClose, whatsapp, lojaId }: CartDrawerProps)
       alert("Adicione produtos ao carrinho antes de finalizar.");
       return;
     }
+    if (process.env.NODE_ENV === "production" && items.some((item) => item.id.startsWith("mock-"))) {
+      alert("Remova produtos de exemplo do carrinho antes de finalizar.");
+      return;
+    }
     const url = buildWhatsappUrl(whatsapp, buildCartMessage(items));
     if (!url) {
       alert("WhatsApp da loja nao configurado.");

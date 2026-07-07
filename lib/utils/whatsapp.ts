@@ -6,6 +6,11 @@ export function normalizeWhatsapp(value?: string | null) {
   return (value ?? "").replace(/\D/g, "");
 }
 
+export function isPlaceholderWhatsapp(phone?: string | null) {
+  const normalized = normalizeWhatsapp(phone);
+  return ["5599999999999", "5500000000000", "5511999999999"].includes(normalized);
+}
+
 export function buildCartMessage(items: CartItem[]) {
   const lines = ["Ola! Tenho interesse nos seguintes produtos:", ""];
 
@@ -42,5 +47,6 @@ export function buildSingleProductMessage(produto: Produto, url: string, quantid
 export function buildWhatsappUrl(phone: string | null | undefined, message: string) {
   const normalized = normalizeWhatsapp(phone);
   if (!normalized) return null;
+  if (process.env.NODE_ENV === "production" && isPlaceholderWhatsapp(normalized)) return null;
   return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
 }

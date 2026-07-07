@@ -21,6 +21,7 @@ export const useCartStore = create<CartStore>()(
       items: [],
       addItem: (item, quantidade = 1) =>
         set((state) => {
+          if (process.env.NODE_ENV === "production" && item.id.startsWith("mock-")) return state;
           const existing = state.items.find((cartItem) => cartItem.id === item.id);
           if (existing) {
             return {

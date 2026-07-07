@@ -3,13 +3,14 @@
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { BadgeCheck, Diamond, Eye, Gift, Heart, Search, ShoppingBag, SlidersHorizontal, Truck } from "lucide-react";
+import { BadgeCheck, Diamond, Eye, Gift, MessageCircle, Search, ShoppingBag, SlidersHorizontal, Truck } from "lucide-react";
 import { motion } from "motion/react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/Button";
 import { useCartStore } from "@/lib/cart/useCartStore";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 import { formatPrice } from "@/lib/utils/formatPrice";
+import { buildWhatsappUrl } from "@/lib/utils/whatsapp";
 import type { Categoria } from "@/types/categoria";
 import type { Produto } from "@/types/produto";
 
@@ -18,6 +19,7 @@ type ProductCatalogSectionProps = {
   categories: Categoria[];
   products: Produto[];
   preview?: boolean;
+  whatsapp?: string | null;
 };
 
 const benefits = [
@@ -27,11 +29,14 @@ const benefits = [
   { title: "Atendimento humanizado", text: "Estamos aqui para você", icon: BadgeCheck }
 ];
 
-export function ProductCatalogSection({ lojaSlug, categories, products, preview }: ProductCatalogSectionProps) {
+export function ProductCatalogSection({ lojaSlug, categories, products, preview, whatsapp }: ProductCatalogSectionProps) {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [type, setType] = useState("");
   const [order, setOrder] = useState("recentes");
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const whatsappUrl = buildWhatsappUrl(whatsapp, "Ola! Quero saber quando novos produtos estarao disponiveis.");
+  const hasProducts = products.length > 0;
 
   const filtered = useMemo(() => {
     return [...products]
@@ -43,7 +48,7 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview 
         const priceB = b.preco_promocional ?? b.preco;
         if (order === "menor-preco") return priceA - priceB;
         if (order === "maior-preco") return priceB - priceA;
-        return (a.ordem ?? 0) - (b.ordem ?? 0);
+        return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
       });
   }, [products, search, category, type, order]);
 
@@ -104,7 +109,11 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview 
             />
           </label>
 
-          <button className="flex h-14 items-center justify-center gap-2 rounded-xl border border-[#C9A24D]/30 bg-[#FAF6EF]/74 px-5 text-sm font-semibold text-[#1E1D1B] md:hidden">
+          <button
+            type="button"
+            onClick={() => setMobileFiltersOpen((open) => !open)}
+            className="flex h-14 items-center justify-center gap-2 rounded-xl border border-[#C9A24D]/30 bg-[#FAF6EF]/74 px-5 text-sm font-semibold text-[#1E1D1B] md:hidden"
+          >
             <SlidersHorizontal size={18} className="text-[#B88A2A]" />
             Filtros
           </button>
@@ -129,6 +138,29 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview 
           </select>
         </motion.div>
 
+        {mobileFiltersOpen ? (
+          <motion.div variants={fadeInUp} className="mt-3 grid gap-3 rounded-[22px] border border-[#C9A24D]/20 bg-white/72 p-4 shadow-[0_18px_45px_rgba(90,64,35,0.08)] md:hidden">
+            <select value={category} onChange={(event) => setCategory(event.target.value)} className="h-14 rounded-xl border border-[#C9A24D]/20 bg-white/80 px-4 text-sm text-[#4A403A] outline-none">
+              <option value="">Todas as categorias</option>
+              {categories.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.nome}
+                </option>
+              ))}
+            </select>
+            <select value={type} onChange={(event) => setType(event.target.value)} className="h-14 rounded-xl border border-[#C9A24D]/20 bg-white/80 px-4 text-sm text-[#4A403A] outline-none">
+              <option value="">Todos os tipos</option>
+              <option value="produto">Produtos</option>
+              <option value="kit">Kits</option>
+            </select>
+            <select value={order} onChange={(event) => setOrder(event.target.value)} className="h-14 rounded-xl border border-[#C9A24D]/20 bg-white/80 px-4 text-sm text-[#4A403A] outline-none">
+              <option value="recentes">Mais recentes</option>
+              <option value="menor-preco">Menor preço</option>
+              <option value="maior-preco">Maior preço</option>
+            </select>
+          </motion.div>
+        ) : null}
+
         {filtered.length ? (
           <>
             <motion.div variants={staggerContainer} className="mt-8 hidden gap-x-7 gap-y-6 md:grid md:grid-cols-2 xl:grid-cols-3">
@@ -138,14 +170,30 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview 
             </motion.div>
 
             <motion.div variants={staggerContainer} className="mt-5 flex flex-col gap-4 md:hidden">
-              {filtered.slice(0, 6).map((product) => (
+              {filtered.map((product) => (
                 <MobileProductCard key={product.id} lojaSlug={lojaSlug} product={product} preview={preview} />
               ))}
             </motion.div>
           </>
         ) : (
-          <div className="mt-10 rounded-[22px] border border-[#C9A24D]/18 bg-white/68 p-10 text-center text-[#6F6258] shadow-[0_18px_42px_rgba(80,55,25,0.07)]">
-            Nenhum produto encontrado.
+          <div className="mt-10 rounded-[28px] border border-[#C9A24D]/18 bg-white/72 p-8 text-center shadow-[0_22px_60px_rgba(80,55,25,0.08)] backdrop-blur md:p-12">
+            <span className="mx-auto grid size-14 place-items-center rounded-full bg-[linear-gradient(135deg,#F4D892,#D7AE4A)] text-[#4A3320] shadow-[0_14px_30px_rgba(168,121,33,0.16)]">
+              <ShoppingBag size={24} strokeWidth={1.5} />
+            </span>
+            <h3 className="mt-5 font-serif text-[clamp(32px,4vw,48px)] leading-none text-[#1E1D1B]">
+              {hasProducts ? "Nenhum produto encontrado" : "Catálogo em configuração"}
+            </h3>
+            <p className="mx-auto mt-4 max-w-xl text-[16px] leading-7 text-[#6F6258]">
+              {hasProducts
+                ? "Ajuste os filtros ou a busca para encontrar outras peças da coleção."
+                : "Em breve novos produtos estarão disponíveis."}
+            </p>
+            {!hasProducts && whatsappUrl ? (
+              <Link href={whatsappUrl} target="_blank" className="mt-7 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#D7AE4A,#A87921)] px-6 text-sm font-bold text-white shadow-[0_16px_35px_rgba(168,121,33,0.20)] transition hover:-translate-y-0.5">
+                <MessageCircle size={17} />
+                Falar com a loja
+              </Link>
+            ) : null}
           </div>
         )}
 
@@ -194,6 +242,10 @@ function getCategory(product: Produto) {
 type AddItemToCart = (item: { id: string; nome: string; slug: string; preco: number; imagem_url: string | null }, quantidade?: number) => void;
 
 function addProductToCart(product: Produto, addItem: AddItemToCart, preview?: boolean) {
+  if (process.env.NODE_ENV === "production" && product.id.startsWith("mock-")) {
+    toast.error("Este produto ainda nao esta disponivel para pedido.");
+    return;
+  }
   const price = product.preco_promocional ?? product.preco;
   addItem({ id: product.id, nome: product.nome, slug: product.slug, preco: price, imagem_url: product.imagem_url });
   toast.success(preview ? "Produto de exemplo adicionado ao carrinho." : "Produto adicionado ao carrinho.");
@@ -220,15 +272,11 @@ function DesktopProductCard({ lojaSlug, product, preview }: { lojaSlug: string; 
               src={product.imagem_url}
               alt={product.nome}
               fill
-              unoptimized
               sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
               className="object-cover object-center transition duration-700 group-hover:scale-110"
             />
           ) : null}
           {badge ? <span className="absolute left-4 top-4 rounded-full border border-[#C9A24D]/25 bg-white/88 px-3 py-1.5 text-xs font-bold text-[#B8841F] shadow-[0_8px_20px_rgba(80,55,25,0.08)]">{badge}</span> : null}
-          <span className="absolute right-4 top-4 grid size-10 place-items-center rounded-full border border-[#C9A24D]/18 bg-white/88 text-[#8B6F4E] transition group-hover:bg-[#F7EFE3]" aria-label="Favoritar">
-            <Heart size={20} strokeWidth={1.5} />
-          </span>
           <span className="absolute inset-x-4 bottom-4 translate-y-3 rounded-full bg-[#1E1D1B]/70 px-4 py-2 text-center text-xs font-bold uppercase tracking-[0.18em] text-white opacity-0 shadow-[0_18px_38px_rgba(30,29,27,0.18)] backdrop-blur transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
             Ver detalhes
           </span>
@@ -271,16 +319,13 @@ function MobileProductCard({ lojaSlug, product, preview }: { lojaSlug: string; p
   return (
     <motion.article variants={fadeInUp} whileTap={{ scale: 0.985 }} className="relative grid min-h-[176px] grid-cols-[42%_58%] overflow-hidden rounded-[20px] border border-[#C9A24D]/14 bg-white/82 shadow-[0_16px_38px_rgba(80,55,25,0.08)]">
       <Link href={href} className="relative block bg-[#EADBC8]">
-        {product.imagem_url ? <Image src={product.imagem_url} alt={product.nome} fill unoptimized sizes="42vw" className="object-cover" /> : null}
+        {product.imagem_url ? <Image src={product.imagem_url} alt={product.nome} fill sizes="42vw" className="object-cover" /> : null}
         {badge ? <span className="absolute left-3 top-3 rounded-full border border-[#C9A24D]/20 bg-white/90 px-3 py-1 text-xs font-bold text-[#B8841F] shadow-sm">{badge}</span> : null}
       </Link>
       <div className="relative p-4 pr-4">
-        <span className="absolute right-3 top-4 text-[#8B6F4E]" aria-label="Favoritar">
-          <Heart size={24} strokeWidth={1.35} />
-        </span>
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A24D]">{getCategory(product)}</p>
         <Link href={href}>
-          <h3 className="mt-1 pr-8 font-serif text-[clamp(21px,5vw,28px)] leading-[1.08] text-[#1E1D1B]">{product.nome}</h3>
+          <h3 className="mt-1 font-serif text-[clamp(21px,5vw,28px)] leading-[1.08] text-[#1E1D1B]">{product.nome}</h3>
         </Link>
         {product.descricao ? <p className="mt-1.5 line-clamp-2 text-[13px] leading-[1.45] text-[#6F6258]">{product.descricao}</p> : null}
         <div className="mt-2 flex flex-wrap items-baseline gap-2">

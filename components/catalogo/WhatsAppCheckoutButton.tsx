@@ -14,6 +14,10 @@ type WhatsAppCheckoutButtonProps = {
 
 export function WhatsAppCheckoutButton({ whatsapp, produto, lojaId }: WhatsAppCheckoutButtonProps) {
   async function buy() {
+    if (process.env.NODE_ENV === "production" && produto.id.startsWith("mock-")) {
+      alert("Este produto ainda nao esta disponivel para pedido.");
+      return;
+    }
     const url = buildWhatsappUrl(whatsapp, buildSingleProductMessage(produto, window.location.href));
     if (!url) {
       alert("WhatsApp da loja nao configurado.");

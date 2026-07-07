@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { PremiumShopPage } from "@/components/catalogo/PremiumShopPage";
 import { SetupRequired } from "@/components/ui/SetupRequired";
 import { SupabaseError } from "@/components/ui/SupabaseError";
@@ -9,6 +10,34 @@ import type { Loja } from "@/types/loja";
 import type { Produto } from "@/types/produto";
 
 export const revalidate = 60;
+
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  if (!hasSupabaseEnv()) return { title: "Catalogo" };
+
+  const supabase = createPublicClient();
+  const { data: loja } = await supabase
+    .from("lojas")
+    .select("nome, descricao, capa_url, logo_url")
+    .eq("slug", params.slug)
+    .eq("ativa", true)
+    .single();
+
+  if (!loja) return { title: "Catalogo nao encontrado" };
+
+  const title = `${loja.nome} | Catalogo`;
+  const description = loja.descricao || "Catalogo online com pedidos pelo WhatsApp.";
+  const image = loja.capa_url || loja.logo_url || undefined;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: image ? [{ url: image }] : undefined
+    }
+  };
+}
 
 export default async function ShopPage({ params }: { params: { slug: string } }) {
   if (!hasSupabaseEnv()) return <SetupRequired />;

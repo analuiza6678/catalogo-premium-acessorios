@@ -17,6 +17,10 @@ type ProductCardProps = {
 export function ProductCard({ lojaSlug, produto, large }: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem);
   const price = produto.preco_promocional ?? produto.preco;
+  const addToCart = () => {
+    if (process.env.NODE_ENV === "production" && produto.id.startsWith("mock-")) return;
+    addItem({ id: produto.id, nome: produto.nome, slug: produto.slug, preco: price, imagem_url: produto.imagem_url });
+  };
 
   return (
     <article className="group animate-fadeUp overflow-hidden rounded-[26px] border border-rosa-bebe/70 bg-white p-3 shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-gold">
@@ -43,7 +47,7 @@ export function ProductCard({ lojaSlug, produto, large }: ProductCardProps) {
           </Link>
           <Button
             className="w-full"
-            onClick={() => addItem({ id: produto.id, nome: produto.nome, slug: produto.slug, preco: price, imagem_url: produto.imagem_url })}
+            onClick={addToCart}
           >
             <ShoppingBag size={16} />
             Adicionar
