@@ -21,6 +21,14 @@ type ProductFormProps = {
   produto?: Produto | null;
 };
 
+function getErrorMessage(error: unknown) {
+  if (error instanceof Error) return error.message;
+  if (error && typeof error === "object" && "message" in error) {
+    return String((error as { message?: unknown }).message);
+  }
+  return "Nao foi possivel concluir esta acao. Tente novamente.";
+}
+
 export function ProductForm({ lojaId, categorias, produto }: ProductFormProps) {
   const router = useRouter();
   const [principal, setPrincipal] = useState<File[]>([]);
@@ -35,7 +43,7 @@ export function ProductForm({ lojaId, categorias, produto }: ProductFormProps) {
     const form = new FormData(event.currentTarget);
     const nome = String(form.get("nome") ?? "").trim();
     const categoriaId = String(form.get("categoria_id") ?? "");
-    const preco = Number(form.get("preco"));
+    const preco = Number(String(form.get("preco") ?? "").replace(",", "."));
     const slug = slugify(nome);
 
     if (!nome || !categoriaId || !preco || preco <= 0) return setMessage("Preencha nome, categoria e preco maior que zero.");
@@ -63,7 +71,7 @@ export function ProductForm({ lojaId, categorias, produto }: ProductFormProps) {
         descricao: String(form.get("descricao") ?? "") || null,
         detalhes: String(form.get("detalhes") ?? "") || null,
         preco,
-        preco_promocional: form.get("preco_promocional") ? Number(form.get("preco_promocional")) : null,
+        preco_promocional: form.get("preco_promocional") ? Number(String(form.get("preco_promocional")).replace(",", ".")) : null,
         imagem_url,
         galeria_urls: galeriaUploads.length ? galeriaUploads : produto?.galeria_urls ?? [],
         estoque: form.get("estoque") ? Number(form.get("estoque")) : null,
@@ -83,7 +91,8 @@ export function ProductForm({ lojaId, categorias, produto }: ProductFormProps) {
       router.push("/dashboard/produtos");
       router.refresh();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : "Nao foi possivel concluir esta acao. Tente novamente.");
+      console.error("Erro ao salvar produto", error);
+      setMessage(getErrorMessage(error));
     } finally {
       setLoading(false);
     }
