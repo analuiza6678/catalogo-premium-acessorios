@@ -55,7 +55,7 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
   return (
     <section
       id="produtos"
-      className="relative overflow-hidden bg-[radial-gradient(circle_at_8%_18%,rgba(215,174,74,0.08),transparent_28%),radial-gradient(circle_at_92%_8%,rgba(234,219,200,0.55),transparent_32%),linear-gradient(135deg,#FAF6EF_0%,#F5EDE2_55%,#FAF6EF_100%)] py-16 lg:py-20"
+      className="relative overflow-hidden bg-[radial-gradient(circle_at_8%_18%,rgba(215,174,74,0.08),transparent_28%),radial-gradient(circle_at_92%_8%,rgba(234,219,200,0.55),transparent_32%),linear-gradient(135deg,#FAF6EF_0%,#F5EDE2_55%,#FAF6EF_100%)] py-10 lg:py-20"
     >
       <div className="pointer-events-none absolute -left-40 top-10 h-[520px] w-[520px] rounded-full border border-[#C9A24D]/10 bg-white/18" />
       <div className="pointer-events-none absolute right-0 top-0 hidden h-72 w-[420px] rounded-bl-[180px] bg-[linear-gradient(135deg,rgba(255,255,255,0.55),rgba(234,219,200,0.24))] lg:block" />
@@ -65,26 +65,26 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
         variants={staggerContainer}
-        className="relative z-10 mx-auto max-w-[1400px] px-5 sm:px-8 lg:px-[clamp(32px,6vw,96px)]"
+        className="relative z-10 mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-[clamp(32px,6vw,96px)]"
       >
-        <motion.div variants={fadeInUp} className="grid gap-8 lg:grid-cols-[1fr_460px] lg:items-start">
+        <motion.div variants={fadeInUp} className="grid gap-4 lg:grid-cols-[1fr_460px] lg:items-start lg:gap-8">
           <div>
-            <h2 className="font-serif text-[clamp(44px,5vw,84px)] font-normal leading-none tracking-[-0.035em] text-[#1E1D1B]">
+            <h2 className="font-serif text-[34px] font-normal leading-none tracking-[-0.03em] text-[#1E1D1B] lg:text-[clamp(56px,5vw,84px)] lg:tracking-[-0.035em]">
               Catálogo da Loja
             </h2>
-            <div className="mt-7 flex max-w-[420px] items-center gap-3">
+            <div className="mt-4 flex max-w-[220px] items-center gap-3 lg:mt-7 lg:max-w-[420px]">
               <span className="h-px flex-1 bg-[#C9A24D]/50" />
               <span className="text-[#C9A24D]">✦</span>
               <span className="h-px flex-1 bg-[#C9A24D]/50" />
             </div>
           </div>
 
-          <p className="max-w-[460px] text-[17px] leading-[1.7] text-[#6F6258] lg:pt-3">
+          <p className="max-w-[420px] text-sm leading-6 text-[#6F6258] lg:max-w-[460px] lg:pt-3 lg:text-[17px] lg:leading-[1.7]">
             Peças selecionadas para realçar sua essência. Joias que celebram cada detalhe, com brilho, delicadeza e sofisticação.
           </p>
         </motion.div>
 
-        <motion.div variants={fadeInUp} className="scrollbar-none mt-10 flex gap-3 overflow-x-auto pb-1">
+        <motion.div variants={fadeInUp} className="scrollbar-none mt-6 flex gap-2 overflow-x-auto pb-1 lg:mt-10 lg:gap-3">
           <CategoryChip active={!category} onClick={() => setCategory("")}>
             Todos
           </CategoryChip>
@@ -97,22 +97,22 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
 
         <motion.div
           variants={fadeInUp}
-          className="mt-7 grid gap-3 rounded-[22px] border border-[#C9A24D]/20 bg-white/52 p-4 shadow-[0_22px_60px_rgba(90,64,35,0.08)] backdrop-blur-xl md:grid-cols-[1fr_auto] lg:grid-cols-[1.35fr_1fr_1fr_1fr] lg:p-[18px_22px]"
+          className="mt-5 grid gap-2 rounded-[18px] border border-[#C9A24D]/20 bg-white/52 p-3 shadow-[0_16px_42px_rgba(90,64,35,0.07)] backdrop-blur-xl md:grid-cols-[1fr_auto] lg:mt-7 lg:grid-cols-[1.35fr_1fr_1fr_1fr] lg:gap-3 lg:rounded-[22px] lg:p-[18px_22px] lg:shadow-[0_22px_60px_rgba(90,64,35,0.08)]"
         >
           <label className="relative">
-            <Search className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#B88A2A]" size={20} />
+            <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#B88A2A] lg:left-4" size={18} />
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Buscar por nome ou palavra-chave"
-              className="h-14 w-full rounded-xl border border-[#C9A24D]/20 bg-white/72 pl-12 pr-4 text-sm text-[#4A403A] outline-none transition placeholder:text-[#9C9088] focus:border-[#C9A24D]/60 focus:shadow-[0_0_0_4px_rgba(201,162,77,0.10)]"
+              className="h-12 w-full rounded-xl border border-[#C9A24D]/20 bg-white/72 pl-10 pr-3 text-sm text-[#4A403A] outline-none transition placeholder:text-[#9C9088] focus:border-[#C9A24D]/60 focus:shadow-[0_0_0_4px_rgba(201,162,77,0.10)] lg:h-14 lg:pl-12 lg:pr-4"
             />
           </label>
 
           <button
             type="button"
             onClick={() => setMobileFiltersOpen((open) => !open)}
-            className="flex h-14 items-center justify-center gap-2 rounded-xl border border-[#C9A24D]/30 bg-[#FAF6EF]/74 px-5 text-sm font-semibold text-[#1E1D1B] md:hidden"
+            className="flex h-12 items-center justify-center gap-2 rounded-xl border border-[#C9A24D]/30 bg-[#FAF6EF]/74 px-4 text-sm font-semibold text-[#1E1D1B] md:hidden"
           >
             <SlidersHorizontal size={18} className="text-[#B88A2A]" />
             Filtros
@@ -139,8 +139,8 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
         </motion.div>
 
         {mobileFiltersOpen ? (
-          <motion.div variants={fadeInUp} className="mt-3 grid gap-3 rounded-[22px] border border-[#C9A24D]/20 bg-white/72 p-4 shadow-[0_18px_45px_rgba(90,64,35,0.08)] md:hidden">
-            <select value={category} onChange={(event) => setCategory(event.target.value)} className="h-14 rounded-xl border border-[#C9A24D]/20 bg-white/80 px-4 text-sm text-[#4A403A] outline-none">
+          <motion.div variants={fadeInUp} className="mt-3 grid gap-2 rounded-[18px] border border-[#C9A24D]/20 bg-white/72 p-3 shadow-[0_14px_35px_rgba(90,64,35,0.07)] md:hidden">
+            <select value={category} onChange={(event) => setCategory(event.target.value)} className="h-12 rounded-xl border border-[#C9A24D]/20 bg-white/80 px-3 text-sm text-[#4A403A] outline-none">
               <option value="">Todas as categorias</option>
               {categories.map((item) => (
                 <option key={item.id} value={item.id}>
@@ -148,12 +148,12 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
                 </option>
               ))}
             </select>
-            <select value={type} onChange={(event) => setType(event.target.value)} className="h-14 rounded-xl border border-[#C9A24D]/20 bg-white/80 px-4 text-sm text-[#4A403A] outline-none">
+            <select value={type} onChange={(event) => setType(event.target.value)} className="h-12 rounded-xl border border-[#C9A24D]/20 bg-white/80 px-3 text-sm text-[#4A403A] outline-none">
               <option value="">Todos os tipos</option>
               <option value="produto">Produtos</option>
               <option value="kit">Kits</option>
             </select>
-            <select value={order} onChange={(event) => setOrder(event.target.value)} className="h-14 rounded-xl border border-[#C9A24D]/20 bg-white/80 px-4 text-sm text-[#4A403A] outline-none">
+            <select value={order} onChange={(event) => setOrder(event.target.value)} className="h-12 rounded-xl border border-[#C9A24D]/20 bg-white/80 px-3 text-sm text-[#4A403A] outline-none">
               <option value="recentes">Mais recentes</option>
               <option value="menor-preco">Menor preço</option>
               <option value="maior-preco">Maior preço</option>
@@ -169,7 +169,7 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
               ))}
             </motion.div>
 
-            <motion.div variants={staggerContainer} className="mt-5 flex flex-col gap-4 md:hidden">
+            <motion.div variants={staggerContainer} className="mt-5 flex flex-col gap-3 md:hidden">
               {filtered.map((product) => (
                 <MobileProductCard key={product.id} lojaSlug={lojaSlug} product={product} preview={preview} />
               ))}
@@ -220,7 +220,7 @@ function CategoryChip({ active, onClick, children }: { active: boolean; onClick:
   return (
     <button
       onClick={onClick}
-      className={`h-11 shrink-0 rounded-full px-6 text-sm font-semibold transition ${
+      className={`h-9 shrink-0 rounded-full px-4 text-xs font-semibold transition lg:h-11 lg:px-6 lg:text-sm ${
         active
           ? "bg-[linear-gradient(135deg,#D7AE4A,#A87921)] text-white shadow-[0_12px_26px_rgba(168,121,33,0.18)]"
           : "border border-[#C9A24D]/28 bg-white/55 text-[#4A403A] hover:-translate-y-0.5 hover:border-[#C9A24D]/50 hover:bg-[#F7EFE3]"
@@ -317,28 +317,28 @@ function MobileProductCard({ lojaSlug, product, preview }: { lojaSlug: string; p
   const addItem = useCartStore((state) => state.addItem);
 
   return (
-    <motion.article variants={fadeInUp} whileTap={{ scale: 0.985 }} className="relative grid min-h-[176px] grid-cols-[42%_58%] overflow-hidden rounded-[20px] border border-[#C9A24D]/14 bg-white/82 shadow-[0_16px_38px_rgba(80,55,25,0.08)]">
+    <motion.article variants={fadeInUp} whileTap={{ scale: 0.99 }} className="relative grid min-h-[140px] grid-cols-[42%_58%] overflow-hidden rounded-[18px] border border-[#C9A24D]/14 bg-white/82 shadow-[0_12px_28px_rgba(80,55,25,0.07)]">
       <Link href={href} className="relative block bg-[#EADBC8]">
         {product.imagem_url ? <Image src={product.imagem_url} alt={product.nome} fill sizes="42vw" className="object-cover" /> : null}
-        {badge ? <span className="absolute left-3 top-3 rounded-full border border-[#C9A24D]/20 bg-white/90 px-3 py-1 text-xs font-bold text-[#B8841F] shadow-sm">{badge}</span> : null}
+        {badge ? <span className="absolute left-2.5 top-2.5 rounded-full border border-[#C9A24D]/20 bg-white/90 px-2.5 py-0.5 text-[10px] font-bold text-[#B8841F] shadow-sm">{badge}</span> : null}
       </Link>
-      <div className="relative p-4 pr-4">
+      <div className="relative p-3 pr-3">
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A24D]">{getCategory(product)}</p>
         <Link href={href}>
-          <h3 className="mt-1 font-serif text-[clamp(21px,5vw,28px)] leading-[1.08] text-[#1E1D1B]">{product.nome}</h3>
+          <h3 className="mt-1 line-clamp-2 font-serif text-[20px] leading-[1.05] text-[#1E1D1B]">{product.nome}</h3>
         </Link>
-        {product.descricao ? <p className="mt-1.5 line-clamp-2 text-[13px] leading-[1.45] text-[#6F6258]">{product.descricao}</p> : null}
-        <div className="mt-2 flex flex-wrap items-baseline gap-2">
-          <span className="text-lg font-extrabold text-[#A87921]">{formatPrice(price)}</span>
-          {product.preco_promocional ? <span className="text-sm text-[#AFA49B] line-through">{formatPrice(product.preco)}</span> : null}
+        {product.descricao ? <p className="mt-1 hidden text-[12px] leading-[1.35] text-[#6F6258] min-[390px]:line-clamp-1 min-[390px]:block">{product.descricao}</p> : null}
+        <div className="mt-2 flex flex-wrap items-baseline gap-1.5">
+          <span className="text-base font-extrabold text-[#A87921]">{formatPrice(price)}</span>
+          {product.preco_promocional ? <span className="text-xs text-[#AFA49B] line-through">{formatPrice(product.preco)}</span> : null}
         </div>
-        <div className="mt-3 grid grid-cols-2 gap-2">
+        <div className="mt-2.5 grid grid-cols-2 gap-1.5">
           <Link href={href}>
-            <Button variant="secondary" className="h-10 w-full rounded-full px-2 text-[11px]">
+            <Button variant="secondary" className="h-8 w-full rounded-full px-2 text-[10px]">
               Ver
             </Button>
           </Link>
-          <Button onClick={() => addProductToCart(product, addItem, preview)} className="h-10 w-full rounded-full bg-[linear-gradient(135deg,#D7AE4A,#A87921)] px-2 text-[11px]">
+          <Button onClick={() => addProductToCart(product, addItem, preview)} className="h-8 w-full rounded-full bg-[linear-gradient(135deg,#D7AE4A,#A87921)] px-2 text-[10px]">
             Adicionar
           </Button>
         </div>
