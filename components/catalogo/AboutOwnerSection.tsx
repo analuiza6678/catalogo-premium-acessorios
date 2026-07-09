@@ -7,7 +7,7 @@ import { buildWhatsappUrl } from "@/lib/utils/whatsapp";
 import { AnimatedSection } from "./AnimatedSection";
 
 export function AboutOwnerSection({ loja }: { loja: Loja }) {
-  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Ola! Vim pelo catalogo da ${loja.nome}.`);
+  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Olá! Vim pelo catálogo da ${loja.nome}.`);
   const instagram = loja.dona_instagram || loja.instagram;
 
   return (

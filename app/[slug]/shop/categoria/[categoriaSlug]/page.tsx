@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: { slug: string; cat
 
   const supabase = createPublicClient();
   const { data: loja } = await supabase.from("lojas").select("id,nome,descricao,capa_url,logo_url").eq("slug", params.slug).eq("ativa", true).single();
-  if (!loja) return { title: "Categoria nao encontrada" };
+  if (!loja) return { title: "Categoria não encontrada" };
 
   const { data: categoria } = await supabase
     .from("categorias")
@@ -42,6 +42,12 @@ export async function generateMetadata({ params }: { params: { slug: string; cat
       title,
       description,
       images: image ? [{ url: image }] : undefined
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: image ? [image] : undefined
     }
   };
 }

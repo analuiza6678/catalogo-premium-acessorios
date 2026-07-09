@@ -5,9 +5,9 @@ import { motion } from "motion/react";
 import { fadeInUp, staggerContainer } from "@/lib/utils/motion";
 
 const benefits = [
-  { icon: HandHeart, title: "Pecas selecionadas", text: "Curadoria delicada para combinar com diferentes estilos." },
+  { icon: HandHeart, title: "Peças selecionadas", text: "Curadoria delicada para combinar com diferentes estilos." },
   { icon: MessageCircle, title: "Atendimento personalizado", text: "Tire duvidas e combine detalhes diretamente pelo WhatsApp." },
-  { icon: Gift, title: "Pedido pelo WhatsApp", text: "Monte seu carrinho e envie o pedido pronto para a loja." },
+  { icon: Gift, title: "Pedido pelo WhatsApp", text: "Monte sua sacola e envie o pedido pronto para a loja." },
   { icon: Truck, title: "Entrega combinada", text: "Retirada, entrega ou envio conforme a disponibilidade da loja." }
 ];
 

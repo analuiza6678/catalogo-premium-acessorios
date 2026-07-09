@@ -12,7 +12,7 @@ import type { Produto } from "@/types/produto";
 export const revalidate = 60;
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  if (!hasSupabaseEnv()) return { title: "Catalogo" };
+  if (!hasSupabaseEnv()) return { title: "Catálogo" };
 
   const supabase = createPublicClient();
   const { data: loja } = await supabase
@@ -22,10 +22,10 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     .eq("ativa", true)
     .single();
 
-  if (!loja) return { title: "Catalogo nao encontrado" };
+  if (!loja) return { title: "Catálogo não encontrado" };
 
-  const title = `${loja.nome} | Catalogo`;
-  const description = loja.descricao || "Catalogo online com pedidos pelo WhatsApp.";
+  const title = `${loja.nome} | Acessórios femininos delicados`;
+  const description = loja.descricao || "Catálogo de acessórios femininos delicados e sofisticados. Escolha suas peças favoritas e finalize pelo WhatsApp.";
   const image = loja.capa_url || loja.logo_url || undefined;
 
   return {
@@ -35,6 +35,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       title,
       description,
       images: image ? [{ url: image }] : undefined
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: image ? [image] : undefined
     }
   };
 }

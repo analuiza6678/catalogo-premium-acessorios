@@ -10,6 +10,7 @@ import { SupabaseError } from "@/components/ui/SupabaseError";
 import { hasSupabaseEnv } from "@/lib/supabase/env";
 import { createPublicClient } from "@/lib/supabase/public";
 import { mockProducts } from "@/lib/mock/catalog";
+import { productDescription, productName } from "@/lib/catalog/productDisplay";
 import type { Loja } from "@/types/loja";
 import type { Produto } from "@/types/produto";
 
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: { params: { slug: string; pro
 
   const supabase = createPublicClient();
   const { data: loja } = await supabase.from("lojas").select("id,nome,descricao").eq("slug", params.slug).eq("ativa", true).single();
-  if (!loja) return { title: "Produto nao encontrado" };
+  if (!loja) return { title: "Produto não encontrado" };
 
   const { data: produto } = await supabase
     .from("produtos")
@@ -32,8 +33,8 @@ export async function generateMetadata({ params }: { params: { slug: string; pro
 
   if (!produto) return { title: `${loja.nome} | Produto` };
 
-  const title = `${produto.nome} | ${loja.nome}`;
-  const description = produto.descricao || loja.descricao || "Produto disponivel para pedido pelo WhatsApp.";
+  const title = `${productName(produto.nome)} | ${loja.nome}`;
+  const description = productDescription(produto as Produto) || loja.descricao || `Veja detalhes, preço e disponibilidade de ${productName(produto.nome)}. Finalize seu pedido pelo WhatsApp.`;
 
   return {
     title,
@@ -42,6 +43,12 @@ export async function generateMetadata({ params }: { params: { slug: string; pro
       title,
       description,
       images: produto.imagem_url ? [{ url: produto.imagem_url }] : undefined
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: produto.imagem_url ? [produto.imagem_url] : undefined
     }
   };
 }
@@ -91,10 +98,12 @@ export default async function ProductPage({ params }: { params: { slug: string; 
         </div>
       </div>
       <ProductDetails loja={loja as Loja} produto={produtoAtual} />
-      <section className="mx-auto max-w-6xl px-4 pb-14">
-        <h2 className="mb-5 font-serif text-4xl text-preto">Produtos relacionados</h2>
-        <ProductGrid lojaSlug={params.slug} produtos={(relacionados ?? []) as Produto[]} emptyTitle="Nenhum produto relacionado encontrado." />
-      </section>
+      {(relacionados ?? []).length ? (
+        <section className="mx-auto max-w-6xl px-4 pb-14">
+          <h2 className="mb-5 font-serif text-4xl text-preto">Peças relacionadas</h2>
+          <ProductGrid lojaSlug={params.slug} produtos={(relacionados ?? []) as Produto[]} emptyTitle="Nenhum produto relacionado encontrado." />
+        </section>
+      ) : null}
       <CartButton whatsapp={loja.whatsapp} lojaId={loja.id} />
     </main>
   );

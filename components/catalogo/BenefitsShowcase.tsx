@@ -6,7 +6,7 @@ import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 const benefits = [
   { icon: Sparkles, title: "Curadoria delicada", text: "Peças escolhidas pelo acabamento, brilho e versatilidade." },
-  { icon: MessageCircle, title: "Compra pelo WhatsApp", text: "Envie o carrinho pronto e combine tudo diretamente com a loja." },
+  { icon: MessageCircle, title: "Compra pelo WhatsApp", text: "Envie sua sacola pronta e combine tudo diretamente com a loja." },
   { icon: Gift, title: "Kits para presente", text: "Composições prontas para surpreender com delicadeza." },
   { icon: HandHeart, title: "Atendimento próximo", text: "Uma experiência simples, cuidadosa e personalizada." }
 ];
@@ -46,6 +46,24 @@ export function BenefitsShowcase() {
               </motion.article>
             );
           })}
+        </motion.div>
+
+        <motion.div variants={fadeInUp} className="lg:col-span-2 rounded-[28px] border border-[#C9A24D]/18 bg-white/54 p-5 shadow-[0_22px_60px_rgba(80,55,25,0.08)] backdrop-blur-xl lg:p-7">
+          <div className="grid gap-4 lg:grid-cols-[300px_1fr] lg:items-center">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#C9A24D]">Como comprar</p>
+              <h3 className="mt-2 font-serif text-3xl leading-none text-[#1E1D1B]">Comprar é simples</h3>
+              <p className="mt-3 text-sm leading-6 text-[#6F6258]">Escolha suas peças, monte sua sacola e finalize pelo WhatsApp.</p>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-4">
+              {["Escolha as peças", "Adicione ao pedido", "Finalize no WhatsApp", "Combine entrega"].map((step, index) => (
+                <div key={step} className="rounded-2xl bg-[#FAF6EF]/80 px-4 py-3 text-sm font-semibold text-[#1E1D1B]">
+                  <span className="mb-2 grid size-7 place-items-center rounded-full bg-[#C9A24D] text-xs text-white">{index + 1}</span>
+                  {step}
+                </div>
+              ))}
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

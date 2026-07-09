@@ -10,15 +10,16 @@ import { buildWhatsappUrl } from "@/lib/utils/whatsapp";
 
 const links = [
   { href: "#inicio", label: "Início" },
-  { href: "#produtos", label: "Shop", active: true },
-  { href: "#kits", label: "Kits" },
-  { href: "#sobre", label: "Sobre nós" },
-  { href: "#localizacao", label: "Contato" }
+  { href: "#produtos", label: "Acessórios", active: true },
+  { href: "#kits", label: "Kits", kitOnly: true },
+  { href: "#sobre", label: "Sobre" },
+  { href: "#localizacao", label: "Atendimento" }
 ];
 
-export function PremiumHeader({ loja }: { loja: Loja }) {
+export function PremiumHeader({ loja, showKits = true }: { loja: Loja; showKits?: boolean }) {
   const [open, setOpen] = useState(false);
-  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Ola! Vim pelo catalogo da ${loja.nome}.`);
+  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Olá! Vim pelo catálogo da ${loja.nome}.`);
+  const visibleLinks = links.filter((link) => !link.kitOnly || showKits);
 
   return (
     <header className="sticky top-0 z-40 bg-[#FAF6EF]/58">
@@ -35,7 +36,7 @@ export function PremiumHeader({ loja }: { loja: Loja }) {
         </Link>
 
         <nav className="hidden items-center gap-[clamp(34px,3.2vw,58px)] text-[16px] font-medium text-[#1E1D1B]/88 lg:flex">
-          {links.map((link) => (
+          {visibleLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -75,7 +76,7 @@ export function PremiumHeader({ loja }: { loja: Loja }) {
       {open ? (
         <div className="border-t border-[#EADBC8]/70 bg-[#FAF6EF]/98 px-5 py-4 lg:hidden">
           <nav className="flex flex-col gap-2">
-            {links.map((link) => (
+            {visibleLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}

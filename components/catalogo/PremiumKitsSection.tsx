@@ -24,7 +24,7 @@ export function PremiumKitsSection({
   const shouldShowFallbackKit = Boolean(preview);
   const price = kit ? kit.preco_promocional ?? kit.preco : shouldShowFallbackKit ? 149.9 : null;
   const oldPrice = kit?.preco_promocional ? kit.preco : shouldShowFallbackKit ? 189.9 : null;
-  const whatsappUrl = buildWhatsappUrl(whatsapp, "Ola! Quero montar um kit especial.");
+  const whatsappUrl = buildWhatsappUrl(whatsapp, "Olá! Quero montar um kit especial.");
 
   return (
     <section id="kits" className="relative overflow-hidden bg-[radial-gradient(circle_at_10%_18%,rgba(215,174,74,0.10),transparent_30%),radial-gradient(circle_at_88%_42%,rgba(232,205,168,0.35),transparent_34%),linear-gradient(135deg,#FAF6EF_0%,#F7EFE8_48%,#EFE1CF_100%)] px-[22px] py-20 lg:px-[clamp(40px,7vw,120px)] lg:py-24">
@@ -33,17 +33,17 @@ export function PremiumKitsSection({
 
       <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="relative mx-auto grid max-w-[1400px] gap-12 lg:min-h-[640px] lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-[clamp(56px,7vw,110px)]">
         <div>
-          <motion.p variants={fadeInUp} className="text-xs font-bold uppercase tracking-[0.30em] text-[#C9A24D]">COMPOSICOES PRONTAS</motion.p>
+          <motion.p variants={fadeInUp} className="text-xs font-bold uppercase tracking-[0.30em] text-[#C9A24D]">COMPOSIÇÕES PRONTAS</motion.p>
           <motion.h2 variants={fadeInUp} className="mt-4 font-serif text-[clamp(44px,5vw,82px)] font-normal leading-[0.95] tracking-[-0.04em] text-[#1E1D1B]">
             Kits Especiais
           </motion.h2>
           <motion.span variants={fadeInUp} className="mt-7 block h-px w-28 bg-[#C9A24D]/65" />
           <motion.p variants={fadeInUp} className="mt-7 max-w-[520px] text-[17px] leading-[1.8] text-[#6F6258]">
-            Kits com combinacoes pensadas para presente, producoes completas e finalizacao pelo WhatsApp.
+            Kits com combinações pensadas para presente, produções completas e finalização pelo WhatsApp.
           </motion.p>
 
           <motion.div variants={fadeInUp} className="mt-8 max-w-[460px] rounded-[24px] border border-[#C9A24D]/18 bg-white/55 p-6 shadow-[0_22px_60px_rgba(80,55,25,0.08)] backdrop-blur-xl lg:p-7">
-            {["Ideal para presente", "Combinacao pronta", "Finalizacao pelo WhatsApp"].map((item) => (
+            {["Ideal para presente", "Combinação pronta", "Finalização pelo WhatsApp"].map((item) => (
               <p key={item} className="flex items-center gap-4 py-2.5 text-[15px] font-semibold text-[#1E1D1B]">
                 <span className="grid size-7 place-items-center rounded-full bg-[linear-gradient(135deg,#D7AE4A,#A87921)] text-white shadow-[0_8px_18px_rgba(168,121,33,0.18)]">
                   <Check size={15} />
@@ -68,7 +68,7 @@ export function PremiumKitsSection({
             Pronto para presentear
           </span>
           <span className="absolute bottom-16 right-4 hidden rounded-full border border-[#C9A24D]/18 bg-white/66 px-5 py-3 text-[13px] text-[#6F6258] shadow-[0_16px_35px_rgba(80,55,25,0.08)] backdrop-blur lg:block">
-            Compra rapida pelo WhatsApp
+            Compra rápida pelo WhatsApp
           </span>
 
           {kit || shouldShowFallbackKit ? (
@@ -88,7 +88,7 @@ export function PremiumKitsSection({
                 <Link href={kit ? `/${lojaSlug}/shop/produto/${kit.slug}` : `/${lojaSlug}/shop`} className="mt-2 block font-serif text-[32px] leading-[1.05] text-[#1E1D1B]">
                   {kit?.nome || "Kit Essencial Dourado"}
                 </Link>
-                <p className="mt-3 text-[15px] leading-[1.55] text-[#6F6258]">{kit?.descricao || "Conjunto completo com pecas versateis para o dia a dia."}</p>
+                <p className="mt-3 text-[15px] leading-[1.55] text-[#6F6258]">{kit?.descricao || "Conjunto completo com peças versáteis para o dia a dia."}</p>
                 {price ? (
                   <div className="mt-4 flex items-baseline gap-2">
                     <span className="text-[22px] font-extrabold text-[#A87921]">{formatPrice(price)}</span>
@@ -103,7 +103,7 @@ export function PremiumKitsSection({
                 <PackageOpen size={28} strokeWidth={1.5} />
               </span>
               <h3 className="mt-6 font-serif text-4xl leading-none text-[#1E1D1B]">Kits em breve</h3>
-              <p className="mt-4 text-sm leading-6 text-[#6F6258]">A loja ainda esta preparando combinacoes especiais para presentear.</p>
+              <p className="mt-4 text-sm leading-6 text-[#6F6258]">A loja ainda está preparando combinações especiais para presentear.</p>
               {whatsappUrl ? (
                 <Link href={whatsappUrl} target="_blank" className="mt-6 inline-flex h-12 items-center justify-center rounded-full bg-[linear-gradient(135deg,#D7AE4A,#A87921)] px-6 text-sm font-bold text-white">
                   Falar com a loja

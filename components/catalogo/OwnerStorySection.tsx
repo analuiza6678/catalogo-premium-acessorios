@@ -2,12 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Heart, Instagram, MessageCircle, Sparkles } from "lucide-react";
 import type { Loja } from "@/types/loja";
-import { fallbackImages, mockStore } from "@/lib/mock/catalog";
+import { cleanText } from "@/lib/catalog/productDisplay";
 import { buildWhatsappUrl } from "@/lib/utils/whatsapp";
 import { AnimatedReveal } from "./AnimatedReveal";
 
 export function OwnerStorySection({ loja }: { loja: Loja }) {
-  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Ola! Vim pelo catalogo da ${loja.nome}.`);
+  const ownerName = cleanText(loja.dona_nome);
+  const ownerStory = cleanText(loja.dona_historia);
+  const ownerPhoto = cleanText(loja.dona_foto_url);
+  if (!ownerName && !ownerStory && !ownerPhoto && !loja.dona_instagram) return null;
+
+  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Olá! Vim pelo catálogo da ${loja.nome}.`);
   const instagram = loja.dona_instagram || loja.instagram;
   const instagramUrl = instagram ? (instagram.startsWith("http") ? instagram : `https://instagram.com/${instagram.replace("@", "")}`) : null;
 
@@ -18,7 +23,11 @@ export function OwnerStorySection({ loja }: { loja: Loja }) {
         <div className="order-2 lg:order-1">
           <div className="relative mx-auto max-w-[540px] overflow-hidden rounded-[32px] border border-[#C9A24D]/16 bg-white/42 shadow-[0_30px_80px_rgba(80,55,25,0.14)]">
             <div className="relative aspect-[4/5]">
-              <Image src={loja.dona_foto_url || fallbackImages[4]} alt={loja.dona_nome || "Dona da loja"} fill className="object-cover object-top" />
+              {ownerPhoto ? (
+                <Image src={ownerPhoto} alt={ownerName || "Dona da loja"} fill className="object-cover object-top" />
+              ) : (
+                <div className="h-full bg-[radial-gradient(circle_at_50%_25%,rgba(215,174,74,0.20),transparent_34%),linear-gradient(135deg,#FAF6EF,#EADBC8)]" />
+              )}
             </div>
             <span className="absolute bottom-5 left-5 rounded-full border border-[#C9A24D]/20 bg-white/85 px-4 py-2 text-[13px] font-semibold text-[#6F6258] shadow-[0_12px_28px_rgba(80,55,25,0.08)]">
               Fundadora
@@ -31,8 +40,10 @@ export function OwnerStorySection({ loja }: { loja: Loja }) {
           <h2 className="mt-4 max-w-[680px] font-serif text-[clamp(42px,5vw,82px)] font-normal leading-[0.96] tracking-[-0.035em] text-[#1E1D1B]">
             Quem cuida de cada detalhe
           </h2>
-          <h3 className="mt-7 font-serif text-[clamp(34px,3vw,46px)] font-medium leading-[1.05] text-[#1E1D1B]">{loja.dona_nome || mockStore.dona_nome}</h3>
-          <p className="mt-4 max-w-[560px] text-[17px] leading-[1.85] text-[#6F6258]">{loja.dona_historia || mockStore.dona_historia}</p>
+          {ownerName ? <h3 className="mt-7 font-serif text-[clamp(34px,3vw,46px)] font-medium leading-[1.05] text-[#1E1D1B]">{ownerName}</h3> : null}
+          <p className="mt-4 max-w-[560px] text-[17px] leading-[1.85] text-[#6F6258]">
+            {ownerStory || "Cada peça é escolhida com cuidado para transmitir delicadeza, estilo e personalidade."}
+          </p>
 
           <p className="mt-7 inline-flex items-center gap-3 rounded-full border border-[#C9A24D]/18 bg-white/60 px-5 py-4 text-base text-[#4A403A] shadow-[0_12px_30px_rgba(80,55,25,0.06)]">
             <Sparkles size={18} className="text-[#C9A24D]" />

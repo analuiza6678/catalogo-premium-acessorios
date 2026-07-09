@@ -21,20 +21,20 @@ export function CartDrawer({ open, onClose, whatsapp, lojaId }: CartDrawerProps)
 
   async function finishOrder() {
     if (!items.length) {
-      alert("Adicione produtos ao carrinho antes de finalizar.");
+      alert("Adicione produtos à sacola antes de finalizar.");
       return;
     }
     if (process.env.NODE_ENV === "production" && items.some((item) => item.id.startsWith("mock-"))) {
-      alert("Remova produtos de exemplo do carrinho antes de finalizar.");
+      alert("Remova produtos de exemplo da sacola antes de finalizar.");
       return;
     }
     const url = buildWhatsappUrl(whatsapp, buildCartMessage(items));
     if (!url) {
-      alert("WhatsApp da loja nao configurado.");
+      alert("WhatsApp da loja não configurado.");
       return;
     }
     if (lojaId) {
-      await recordPedidoEvento({ lojaId, origem: "carrinho", itens: cartItemsToPedidoItems(items) });
+      await recordPedidoEvento({ lojaId, origem: "carrinho", eventType: "click_whatsapp", itens: cartItemsToPedidoItems(items), metadata: { source: "cart_drawer" } });
     }
     window.open(url, "_blank");
   }
@@ -48,15 +48,15 @@ export function CartDrawer({ open, onClose, whatsapp, lojaId }: CartDrawerProps)
         }`}
       >
         <div className="flex items-center justify-between border-b border-white bg-[linear-gradient(135deg,#FFFDF9,#F8DDEB)] p-5">
-          <h2 className="font-serif text-3xl text-[#1E1A18]">Seu carrinho</h2>
-          <Button variant="ghost" className="h-10 w-10 px-0" onClick={onClose} aria-label="Fechar carrinho">
+          <h2 className="font-serif text-3xl text-[#1E1A18]">Minha sacola</h2>
+          <Button variant="ghost" className="h-10 w-10 px-0" onClick={onClose} aria-label="Fechar sacola">
             <X size={18} />
           </Button>
         </div>
 
         <div className="flex-1 overflow-y-auto p-5">
           {!items.length ? (
-            <EmptyState title="Seu carrinho esta vazio." action="Ver produtos" onAction={onClose} />
+            <EmptyState title="Sua sacola está vazia." description="Escolha suas peças favoritas para montar seu pedido." action="Ver acessórios" onAction={onClose} />
           ) : (
             <div className="space-y-4">
               {items.map((item) => (
@@ -94,14 +94,15 @@ export function CartDrawer({ open, onClose, whatsapp, lojaId }: CartDrawerProps)
             <strong className="text-xl text-[#C9A227]">{formatPrice(getSubtotal())}</strong>
           </div>
           <Button className="w-full" onClick={finishOrder}>
-            Finalizar no WhatsApp
+            Finalizar pelo WhatsApp
           </Button>
+          <p className="mt-3 text-center text-xs leading-5 text-[#6F6258]">Você será direcionada para o WhatsApp para confirmar disponibilidade, entrega e pagamento.</p>
           <Button variant="secondary" className="mt-2 w-full" onClick={onClose}>
             Continuar comprando
           </Button>
           {items.length ? (
             <Button variant="ghost" className="mt-2 w-full" onClick={clearCart}>
-              Limpar carrinho
+              Limpar sacola
             </Button>
           ) : null}
         </div>

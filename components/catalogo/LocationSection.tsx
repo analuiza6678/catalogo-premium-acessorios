@@ -6,7 +6,7 @@ import { buildWhatsappUrl } from "@/lib/utils/whatsapp";
 import { AnimatedSection } from "./AnimatedSection";
 
 export function LocationSection({ loja }: { loja: Loja }) {
-  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Ola! Gostaria de saber sobre atendimento e entrega da ${loja.nome}.`);
+  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Olá! Gostaria de saber sobre atendimento e entrega da ${loja.nome}.`);
 
   return (
     <AnimatedSection id="localizacao" className="bg-bege py-16">

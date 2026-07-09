@@ -20,18 +20,19 @@ export function PremiumShopPage({ loja, categorias, produtos }: { loja: Loja; ca
   const hasProducts = produtos.length > 0;
   const displayProducts = hasProducts ? produtos : isDevelopment ? mockProducts : [];
   const displayCategories = categorias.length ? categorias : isDevelopment ? mockCategories : [];
-  const enrichedLoja = { ...mockStore, ...loja } as Loja;
+  const enrichedLoja = (isDevelopment ? { ...mockStore, ...loja } : loja) as Loja;
   const kits = displayProducts.filter((product) => product.tipo_produto === "kit");
   const preview = !hasProducts && isDevelopment;
+  const showKits = kits.length > 0 || preview;
 
   return (
     <main className="premium-shop min-h-screen text-[#1E1A18]">
       <DecorativeBackground />
-      <PremiumHeader loja={enrichedLoja} />
+      <PremiumHeader loja={enrichedLoja} showKits={showKits} />
       <EditorialHero loja={enrichedLoja} products={displayProducts} />
       <ProductCatalogSection lojaSlug={loja.slug} categories={displayCategories} products={displayProducts} preview={preview} whatsapp={enrichedLoja.whatsapp} />
       <BenefitsShowcase />
-      <PremiumKitsSection lojaSlug={loja.slug} kits={kits} preview={preview} whatsapp={enrichedLoja.whatsapp} />
+      {showKits ? <PremiumKitsSection lojaSlug={loja.slug} kits={kits} preview={preview} whatsapp={enrichedLoja.whatsapp} /> : null}
       <StoreStorySection loja={enrichedLoja} />
       <OwnerStorySection loja={enrichedLoja} />
       <LocationExperienceSection loja={enrichedLoja} />

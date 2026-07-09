@@ -15,7 +15,7 @@ type KitsSectionProps = {
 };
 
 export function KitsSection({ lojaSlug, whatsapp, kits, preview }: KitsSectionProps) {
-  const url = buildWhatsappUrl(whatsapp, "Ola! Quero montar um kit especial com a loja.");
+  const url = buildWhatsappUrl(whatsapp, "Olá! Quero montar um kit especial com a loja.");
 
   return (
     <section id="kits" className="bg-rosa-bebe/35 py-16">
@@ -47,7 +47,7 @@ export function KitsSection({ lojaSlug, whatsapp, kits, preview }: KitsSectionPr
               <Gift size={26} />
             </div>
             <h3 className="font-serif text-3xl text-preto">Monte seu kit pelo WhatsApp</h3>
-            <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-texto">A loja pode sugerir combinacoes personalizadas para presente, ocasiao especial ou uso diario.</p>
+            <p className="mx-auto mt-3 max-w-lg text-sm leading-7 text-texto">A loja pode sugerir combinações personalizadas para presente, ocasião especial ou uso diário.</p>
             {url ? <Link href={url} target="_blank"><Button className="mt-6">Falar com a loja</Button></Link> : null}
           </div>
         )}

@@ -2,11 +2,14 @@ import Link from "next/link";
 import { Instagram, MessageCircle } from "lucide-react";
 import type { Loja } from "@/types/loja";
 import { buildWhatsappUrl } from "@/lib/utils/whatsapp";
+import { cleanText } from "@/lib/catalog/productDisplay";
 
 export function PremiumFooter({ loja }: { loja: Loja }) {
   const year = new Date().getFullYear();
-  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Ola! Vim pelo catalogo da ${loja.nome}.`);
+  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Olá! Vim pelo catálogo da ${loja.nome}.`);
   const instagramUrl = loja.instagram ? (loja.instagram.startsWith("http") ? loja.instagram : `https://instagram.com/${loja.instagram.replace("@", "")}`) : null;
+  const payment = cleanText(loja.formas_pagamento);
+  const exchange = cleanText(loja.politica_troca);
 
   return (
     <footer className="relative overflow-hidden border-t border-[#C9A24D]/20 bg-[linear-gradient(135deg,#FAF6EF_0%,#F5EDE2_55%,#EFE3D4_100%)] px-[22px] py-14 lg:px-[clamp(40px,7vw,120px)] lg:pb-7 lg:pt-[72px]">
@@ -37,7 +40,7 @@ export function PremiumFooter({ loja }: { loja: Loja }) {
             <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-[#C9A24D]">Contato</h3>
             <div className="flex flex-col gap-3 text-[15px] text-[#4E433B]">
               {whatsappUrl ? <Link href={whatsappUrl} target="_blank" className="inline-flex items-center gap-2 transition hover:translate-x-0.5 hover:text-[#A87921]"><MessageCircle size={16} /> WhatsApp</Link> : null}
-              {instagramUrl ? <Link href={instagramUrl} target="_blank" className="inline-flex items-center gap-2 transition hover:translate-x-0.5 hover:text-[#A87921]"><Instagram size={16} /> Instagram</Link> : <span>Instagram</span>}
+              {instagramUrl ? <Link href={instagramUrl} target="_blank" className="inline-flex items-center gap-2 transition hover:translate-x-0.5 hover:text-[#A87921]"><Instagram size={16} /> Instagram</Link> : null}
               <span>Atendimento online</span>
             </div>
           </div>
@@ -48,6 +51,8 @@ export function PremiumFooter({ loja }: { loja: Loja }) {
               <span>{loja.horario_atendimento || "Segunda a sexta, 9h às 18h"}</span>
               <span>Pedidos finalizados pelo WhatsApp</span>
               <span>Sem checkout online</span>
+              {payment ? <span>Pagamento: {payment}</span> : null}
+              {exchange ? <span>Trocas: {exchange}</span> : null}
             </div>
           </div>
         </div>

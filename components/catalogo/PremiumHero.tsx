@@ -11,7 +11,7 @@ import type { Loja } from "@/types/loja";
 import { FloatingDecorations } from "./FloatingDecorations";
 
 export function PremiumHero({ loja }: { loja: Loja }) {
-  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Ola! Quero conhecer as pecas da ${loja.nome}.`);
+  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Olá! Quero conhecer as peças da ${loja.nome}.`);
 
   return (
     <section id="inicio" className="relative overflow-hidden bg-[linear-gradient(135deg,#FFFFFF_0%,#F8DDEB_48%,#FAF7F2_100%)]">
@@ -25,10 +25,10 @@ export function PremiumHero({ loja }: { loja: Loja }) {
             {loja.nome}
           </motion.h1>
           <motion.p variants={fadeInUp} className="mx-auto mt-5 max-w-2xl text-base leading-8 text-texto lg:mx-0">
-            {loja.descricao || "Acessorios femininos delicados, selecionados para compor momentos especiais com leveza e sofisticacao."}
+            {loja.descricao || "Acessórios femininos delicados, selecionados para compor momentos especiais com leveza e sofisticação."}
           </motion.p>
           <motion.div variants={fadeInUp} className="mt-7 flex flex-wrap justify-center gap-3 lg:justify-start">
-            {["Acessorios selecionados", "Pecas delicadas", "Atendimento pelo WhatsApp"].map((badge) => (
+            {["Acessórios selecionados", "Peças delicadas", "Atendimento pelo WhatsApp"].map((badge) => (
               <span key={badge} className="rounded-full border border-dourado/30 bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-dourado">
                 {badge}
               </span>

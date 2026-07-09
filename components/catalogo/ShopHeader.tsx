@@ -10,7 +10,7 @@ type ShopHeaderProps = {
 };
 
 export function ShopHeader({ loja }: ShopHeaderProps) {
-  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Ola! Vim pelo catalogo da ${loja.nome}.`);
+  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Olá! Vim pelo catálogo da ${loja.nome}.`);
 
   return (
     <header className="bg-white">

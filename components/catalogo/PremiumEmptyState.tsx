@@ -10,7 +10,7 @@ type PremiumEmptyStateProps = {
 };
 
 export function PremiumEmptyState({ whatsapp, title, text }: PremiumEmptyStateProps) {
-  const url = buildWhatsappUrl(whatsapp, "Ola! Gostaria de conhecer as novidades da loja.");
+  const url = buildWhatsappUrl(whatsapp, "Olá! Gostaria de conhecer as novidades da loja.");
   return (
     <div className="rounded-[34px] border border-rosa-bebe bg-[linear-gradient(135deg,#FFFFFF,#FAF7F2)] p-8 text-center shadow-[0_18px_55px_rgba(31,31,31,0.05)]">
       <div className="mx-auto mb-4 grid size-14 place-items-center rounded-full bg-rosa-bebe text-dourado">

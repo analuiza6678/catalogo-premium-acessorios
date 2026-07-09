@@ -1,17 +1,18 @@
 import Link from "next/link";
 import { Clock, MapPinned, MessageCircle, PackageCheck } from "lucide-react";
 import type { Loja } from "@/types/loja";
-import { mockStore } from "@/lib/mock/catalog";
+import { cleanText } from "@/lib/catalog/productDisplay";
 import { buildWhatsappUrl } from "@/lib/utils/whatsapp";
 import { AnimatedReveal } from "./AnimatedReveal";
 
 export function LocationExperienceSection({ loja }: { loja: Loja }) {
-  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Ola! Gostaria de saber sobre atendimento e entrega da ${loja.nome}.`);
+  const whatsappUrl = buildWhatsappUrl(loja.whatsapp, `Olá! Gostaria de saber sobre atendimento e entrega da ${loja.nome}.`);
+  const location = [cleanText(loja.cidade), cleanText(loja.estado)].filter(Boolean).join(" / ") || "Atendimento online";
   const details = [
     { icon: MessageCircle, title: "Atendimento", text: "Pedidos finalizados pelo WhatsApp." },
-    { icon: Clock, title: "Horário", text: loja.horario_atendimento || mockStore.horario_atendimento || "Segunda a sexta, 9h às 18h." },
-    { icon: MapPinned, title: "Localização", text: `${loja.cidade || mockStore.cidade || "Atendimento online"}${loja.estado ? ` / ${loja.estado}` : ""}` },
-    { icon: PackageCheck, title: "Entrega/Retirada", text: loja.endereco || "Combinada diretamente pelo WhatsApp." }
+    { icon: Clock, title: "Horário", text: cleanText(loja.horario_atendimento) || "Consulte o horário pelo WhatsApp." },
+    { icon: MapPinned, title: "Localização", text: location },
+    { icon: PackageCheck, title: "Entrega/Retirada", text: cleanText(loja.formas_entrega) || cleanText(loja.tipo_atendimento) || "Combinada diretamente pelo WhatsApp." }
   ];
 
   return (

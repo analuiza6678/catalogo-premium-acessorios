@@ -31,8 +31,8 @@ export function FloatingJewelryCollage({ images }: FloatingJewelryCollageProps) 
         </div>
       </motion.div>
       <motion.div animate={floating} className="absolute bottom-24 right-0 rounded-[26px] border border-white/80 bg-white/70 p-5 shadow-[0_20px_65px_rgba(58,42,36,0.13)] backdrop-blur-xl">
-        <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#C9A227]">Nova colecao</p>
-        <p className="mt-2 font-serif text-2xl text-[#1E1A18]">Pecas selecionadas</p>
+        <p className="text-xs font-bold uppercase tracking-[0.24em] text-[#C9A227]">Nova coleção</p>
+        <p className="mt-2 font-serif text-2xl text-[#1E1A18]">Peças selecionadas</p>
         <p className="mt-1 text-sm text-[#666]">Pedido via WhatsApp</p>
       </motion.div>
       <div className="absolute right-8 top-20 grid size-24 place-items-center rounded-full border border-[#E8C766]/70 bg-[#C9A227] text-center font-serif text-lg text-white shadow-[0_18px_55px_rgba(201,162,39,0.32)]">

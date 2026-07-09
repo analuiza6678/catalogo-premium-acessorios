@@ -11,6 +11,7 @@ import { useCartStore } from "@/lib/cart/useCartStore";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 import { formatPrice } from "@/lib/utils/formatPrice";
 import { buildWhatsappUrl } from "@/lib/utils/whatsapp";
+import { hasPromo, isLowStock, isOutOfStock, productBadge, productDescription, productName, productPrice } from "@/lib/catalog/productDisplay";
 import type { Categoria } from "@/types/categoria";
 import type { Produto } from "@/types/produto";
 
@@ -35,19 +36,28 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
   const [type, setType] = useState("");
   const [order, setOrder] = useState("recentes");
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const whatsappUrl = buildWhatsappUrl(whatsapp, "Ola! Quero saber quando novos produtos estarao disponiveis.");
+  const whatsappUrl = buildWhatsappUrl(whatsapp, "Olá! Quero saber quando novas peças estarão disponíveis.");
   const hasProducts = products.length > 0;
+  const visibleCategoryIds = useMemo(() => new Set(products.map((product) => product.categoria_id).filter((id): id is string => Boolean(id))), [products]);
+  const visibleCategories = useMemo(() => categories.filter((item) => visibleCategoryIds.has(item.id)), [categories, visibleCategoryIds]);
 
   const filtered = useMemo(() => {
     return [...products]
-      .filter((product) => product.nome.toLowerCase().includes(search.toLowerCase()))
+      .filter((product) => {
+        const term = search.toLowerCase().trim();
+        if (!term) return true;
+        return [product.nome, product.descricao, product.material, product.banho_cor, product.ocasiao, product.tags?.join(" ")]
+          .filter(Boolean)
+          .some((value) => String(value).toLowerCase().includes(term));
+      })
       .filter((product) => (category ? product.categoria_id === category || product.categorias?.id === category : true))
       .filter((product) => (type ? (product.tipo_produto ?? "produto") === type : true))
       .sort((a, b) => {
-        const priceA = a.preco_promocional ?? a.preco;
-        const priceB = b.preco_promocional ?? b.preco;
+        const priceA = productPrice(a);
+        const priceB = productPrice(b);
         if (order === "menor-preco") return priceA - priceB;
         if (order === "maior-preco") return priceB - priceA;
+        if (order === "destaques") return Number(b.destaque) - Number(a.destaque);
         return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
       });
   }, [products, search, category, type, order]);
@@ -70,7 +80,7 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
         <motion.div variants={fadeInUp} className="grid gap-4 lg:grid-cols-[1fr_460px] lg:items-start lg:gap-8">
           <div>
             <h2 className="font-serif text-[34px] font-normal leading-none tracking-[-0.03em] text-[#1E1D1B] lg:text-[clamp(56px,5vw,84px)] lg:tracking-[-0.035em]">
-              Catálogo da Loja
+              Escolha suas peças favoritas
             </h2>
             <div className="mt-4 flex max-w-[220px] items-center gap-3 lg:mt-7 lg:max-w-[420px]">
               <span className="h-px flex-1 bg-[#C9A24D]/50" />
@@ -80,7 +90,7 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
           </div>
 
           <p className="max-w-[420px] text-sm leading-6 text-[#6F6258] lg:max-w-[460px] lg:pt-3 lg:text-[17px] lg:leading-[1.7]">
-            Peças selecionadas para realçar sua essência. Joias que celebram cada detalhe, com brilho, delicadeza e sofisticação.
+            Monte seu pedido, adicione à sacola e finalize pelo WhatsApp com atendimento personalizado.
           </p>
         </motion.div>
 
@@ -88,7 +98,7 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
           <CategoryChip active={!category} onClick={() => setCategory("")}>
             Todos
           </CategoryChip>
-          {categories.map((item) => (
+          {visibleCategories.map((item) => (
             <CategoryChip key={item.id} active={category === item.id} onClick={() => setCategory(item.id)}>
               {item.nome}
             </CategoryChip>
@@ -120,7 +130,7 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
 
           <select value={category} onChange={(event) => setCategory(event.target.value)} className="hidden h-14 rounded-xl border border-[#C9A24D]/20 bg-white/72 px-4 text-sm text-[#4A403A] outline-none focus:border-[#C9A24D]/60 md:block">
             <option value="">Todas as categorias</option>
-            {categories.map((item) => (
+            {visibleCategories.map((item) => (
               <option key={item.id} value={item.id}>
                 {item.nome}
               </option>
@@ -135,6 +145,7 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
             <option value="recentes">Mais recentes</option>
             <option value="menor-preco">Menor preço</option>
             <option value="maior-preco">Maior preço</option>
+            <option value="destaques">Destaques primeiro</option>
           </select>
         </motion.div>
 
@@ -142,7 +153,7 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
           <motion.div variants={fadeInUp} className="mt-3 grid gap-2 rounded-[18px] border border-[#C9A24D]/20 bg-white/72 p-3 shadow-[0_14px_35px_rgba(90,64,35,0.07)] md:hidden">
             <select value={category} onChange={(event) => setCategory(event.target.value)} className="h-12 rounded-xl border border-[#C9A24D]/20 bg-white/80 px-3 text-sm text-[#4A403A] outline-none">
               <option value="">Todas as categorias</option>
-              {categories.map((item) => (
+              {visibleCategories.map((item) => (
                 <option key={item.id} value={item.id}>
                   {item.nome}
                 </option>
@@ -157,13 +168,14 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
               <option value="recentes">Mais recentes</option>
               <option value="menor-preco">Menor preço</option>
               <option value="maior-preco">Maior preço</option>
+              <option value="destaques">Destaques primeiro</option>
             </select>
           </motion.div>
         ) : null}
 
         {filtered.length ? (
           <>
-            <motion.div variants={staggerContainer} className="mt-8 hidden gap-x-7 gap-y-6 md:grid md:grid-cols-2 xl:grid-cols-3">
+            <motion.div variants={staggerContainer} className={`mt-8 hidden gap-x-7 gap-y-6 md:grid md:grid-cols-2 ${filtered.length === 1 ? "xl:grid-cols-[minmax(0,430px)] xl:justify-center" : "xl:grid-cols-3"}`}>
               {filtered.map((product) => (
                 <DesktopProductCard key={product.id} lojaSlug={lojaSlug} product={product} preview={preview} />
               ))}
@@ -181,13 +193,18 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
               <ShoppingBag size={24} strokeWidth={1.5} />
             </span>
             <h3 className="mt-5 font-serif text-[clamp(32px,4vw,48px)] leading-none text-[#1E1D1B]">
-              {hasProducts ? "Nenhum produto encontrado" : "Catálogo em configuração"}
+              {hasProducts ? "Nenhuma peça encontrada" : "Novas peças em breve"}
             </h3>
             <p className="mx-auto mt-4 max-w-xl text-[16px] leading-7 text-[#6F6258]">
               {hasProducts
-                ? "Ajuste os filtros ou a busca para encontrar outras peças da coleção."
-                : "Em breve novos produtos estarão disponíveis."}
+                ? "Ajuste os filtros ou limpe a busca para encontrar outras peças da coleção."
+                : "Estamos preparando uma seleção especial de acessórios. Fale pelo WhatsApp para acompanhar os lançamentos."}
             </p>
+            {hasProducts ? (
+              <Button type="button" variant="secondary" onClick={() => { setSearch(""); setCategory(""); setType(""); }} className="mt-7 rounded-full">
+                Limpar filtros
+              </Button>
+            ) : null}
             {!hasProducts && whatsappUrl ? (
               <Link href={whatsappUrl} target="_blank" className="mt-7 inline-flex h-12 items-center justify-center gap-2 rounded-full bg-[linear-gradient(135deg,#D7AE4A,#A87921)] px-6 text-sm font-bold text-white shadow-[0_16px_35px_rgba(168,121,33,0.20)] transition hover:-translate-y-0.5">
                 <MessageCircle size={17} />
@@ -232,7 +249,7 @@ function CategoryChip({ active, onClick, children }: { active: boolean; onClick:
 }
 
 function getBadge(product: Produto) {
-  return product.badge || (product.tipo_produto === "kit" ? "Kit especial" : product.destaque ? "Destaque" : null);
+  return productBadge(product) || (product.tipo_produto === "kit" ? "Kit especial" : "");
 }
 
 function getCategory(product: Produto) {
@@ -243,18 +260,22 @@ type AddItemToCart = (item: { id: string; nome: string; slug: string; preco: num
 
 function addProductToCart(product: Produto, addItem: AddItemToCart, preview?: boolean) {
   if (process.env.NODE_ENV === "production" && product.id.startsWith("mock-")) {
-    toast.error("Este produto ainda nao esta disponivel para pedido.");
+    toast.error("Este produto ainda não está disponível para pedido.");
     return;
   }
-  const price = product.preco_promocional ?? product.preco;
-  addItem({ id: product.id, nome: product.nome, slug: product.slug, preco: price, imagem_url: product.imagem_url });
-  toast.success(preview ? "Produto de exemplo adicionado ao carrinho." : "Produto adicionado ao carrinho.");
+  if (isOutOfStock(product)) {
+    toast.error("Este produto está esgotado no momento.");
+    return;
+  }
+  const price = productPrice(product);
+  addItem({ id: product.id, nome: productName(product.nome), slug: product.slug, preco: price, imagem_url: product.imagem_url });
+  toast.success(preview ? "Produto de exemplo adicionado à sacola." : "Produto adicionado ao pedido.");
   window.dispatchEvent(new Event("open-cart"));
 }
 
 function DesktopProductCard({ lojaSlug, product, preview }: { lojaSlug: string; product: Produto; preview?: boolean }) {
   const badge = getBadge(product);
-  const price = product.preco_promocional ?? product.preco;
+  const price = productPrice(product);
   const href = `/${lojaSlug}/shop/produto/${product.slug}`;
   const addItem = useCartStore((state) => state.addItem);
 
@@ -286,23 +307,26 @@ function DesktopProductCard({ lojaSlug, product, preview }: { lojaSlug: string; 
       <div className="p-5 pt-4">
         <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[#C9A24D]">{getCategory(product)}</p>
         <Link href={href} className="block">
-          <h3 className="mt-2 font-serif text-[26px] leading-[1.08] text-[#1E1D1B] transition group-hover:text-[#A87921]">{product.nome}</h3>
+          <h3 className="mt-2 font-serif text-[26px] leading-[1.08] text-[#1E1D1B] transition group-hover:text-[#A87921]">{productName(product.nome)}</h3>
         </Link>
-        {product.descricao ? <p className="mt-2 line-clamp-2 text-[14px] leading-5 text-[#6F6258]">{product.descricao}</p> : null}
+        {productDescription(product) ? <p className="mt-2 line-clamp-2 text-[14px] leading-5 text-[#6F6258]">{productDescription(product)}</p> : null}
         <div className="mt-4 flex items-baseline gap-2">
           <span className="text-[19px] font-extrabold text-[#A87921]">{formatPrice(price)}</span>
-          {product.preco_promocional ? <span className="text-sm text-[#AFA49B] line-through">{formatPrice(product.preco)}</span> : null}
+          {hasPromo(product) ? <span className="text-sm text-[#AFA49B] line-through">{formatPrice(product.preco)}</span> : null}
         </div>
+        <p className={`mt-2 text-xs font-bold ${isOutOfStock(product) ? "text-red-700" : isLowStock(product) ? "text-[#A87921]" : "text-[#6F6258]"}`}>
+          {isOutOfStock(product) ? "Produto esgotado" : isLowStock(product) ? "Últimas unidades" : "Pronta entrega"}
+        </p>
         <div className="mt-5 grid grid-cols-2 gap-2">
           <Link href={href} className="min-w-0">
             <Button variant="secondary" className="h-11 w-full rounded-full border-[#C9A24D]/22 bg-[#FAF6EF]/80 px-3 text-xs text-[#3A2A24] hover:bg-[#F7EFE3]">
               <Eye size={15} />
-              Ver
+              Ver detalhes
             </Button>
           </Link>
-          <Button onClick={() => addProductToCart(product, addItem, preview)} className="h-11 w-full rounded-full bg-[linear-gradient(135deg,#D7AE4A,#A87921)] px-3 text-xs shadow-[0_14px_30px_rgba(168,121,33,0.18)] hover:-translate-y-0.5">
+          <Button disabled={isOutOfStock(product)} onClick={() => addProductToCart(product, addItem, preview)} className="h-11 w-full rounded-full bg-[linear-gradient(135deg,#D7AE4A,#A87921)] px-3 text-xs shadow-[0_14px_30px_rgba(168,121,33,0.18)] hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50">
             <ShoppingBag size={15} />
-            Adicionar
+            {isOutOfStock(product) ? "Esgotado" : "Adicionar"}
           </Button>
         </div>
       </div>
@@ -312,7 +336,7 @@ function DesktopProductCard({ lojaSlug, product, preview }: { lojaSlug: string; 
 
 function MobileProductCard({ lojaSlug, product, preview }: { lojaSlug: string; product: Produto; preview?: boolean }) {
   const badge = getBadge(product);
-  const price = product.preco_promocional ?? product.preco;
+  const price = productPrice(product);
   const href = `/${lojaSlug}/shop/produto/${product.slug}`;
   const addItem = useCartStore((state) => state.addItem);
 
@@ -325,12 +349,12 @@ function MobileProductCard({ lojaSlug, product, preview }: { lojaSlug: string; p
       <div className="relative p-3 pr-3">
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#C9A24D]">{getCategory(product)}</p>
         <Link href={href}>
-          <h3 className="mt-1 line-clamp-2 font-serif text-[20px] leading-[1.05] text-[#1E1D1B]">{product.nome}</h3>
+          <h3 className="mt-1 line-clamp-2 font-serif text-[20px] leading-[1.05] text-[#1E1D1B]">{productName(product.nome)}</h3>
         </Link>
-        {product.descricao ? <p className="mt-1 hidden text-[12px] leading-[1.35] text-[#6F6258] min-[390px]:line-clamp-1 min-[390px]:block">{product.descricao}</p> : null}
+        {productDescription(product) ? <p className="mt-1 hidden text-[12px] leading-[1.35] text-[#6F6258] min-[390px]:line-clamp-1 min-[390px]:block">{productDescription(product)}</p> : null}
         <div className="mt-2 flex flex-wrap items-baseline gap-1.5">
           <span className="text-base font-extrabold text-[#A87921]">{formatPrice(price)}</span>
-          {product.preco_promocional ? <span className="text-xs text-[#AFA49B] line-through">{formatPrice(product.preco)}</span> : null}
+          {hasPromo(product) ? <span className="text-xs text-[#AFA49B] line-through">{formatPrice(product.preco)}</span> : null}
         </div>
         <div className="mt-2.5 grid grid-cols-2 gap-1.5">
           <Link href={href}>
@@ -338,8 +362,8 @@ function MobileProductCard({ lojaSlug, product, preview }: { lojaSlug: string; p
               Ver
             </Button>
           </Link>
-          <Button onClick={() => addProductToCart(product, addItem, preview)} className="h-8 w-full rounded-full bg-[linear-gradient(135deg,#D7AE4A,#A87921)] px-2 text-[10px]">
-            Adicionar
+          <Button disabled={isOutOfStock(product)} onClick={() => addProductToCart(product, addItem, preview)} className="h-8 w-full rounded-full bg-[linear-gradient(135deg,#D7AE4A,#A87921)] px-2 text-[10px] disabled:opacity-50">
+            {isOutOfStock(product) ? "Esgotado" : "Adicionar"}
           </Button>
         </div>
       </div>

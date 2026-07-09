@@ -1,18 +1,19 @@
 import Image from "next/image";
 import { Gem, Gift, HeartHandshake } from "lucide-react";
 import type { Loja } from "@/types/loja";
-import { fallbackImages, mockStore } from "@/lib/mock/catalog";
+import { fallbackImages } from "@/lib/mock/catalog";
+import { cleanText } from "@/lib/catalog/productDisplay";
 import { AnimatedReveal } from "./AnimatedReveal";
 
 export function StoreStorySection({ loja }: { loja: Loja }) {
-  const story = loja.sobre_loja || mockStore.sobre_loja!;
-  const style = loja.estilo_loja || mockStore.estilo_loja!;
+  const story = cleanText(loja.sobre_loja) || cleanText(loja.descricao) || "Uma boutique de acessórios criada para valorizar os detalhes que transformam o visual.";
+  const style = cleanText(loja.estilo_loja);
   const storyImage = loja.sobre_imagem_url || loja.capa_url || fallbackImages[1];
   const values = [
-    { icon: Gem, title: loja.diferencial_1 || mockStore.diferencial_1! },
-    { icon: Gift, title: loja.diferencial_2 || mockStore.diferencial_2! },
-    { icon: HeartHandshake, title: loja.diferencial_3 || mockStore.diferencial_3! }
-  ];
+    { icon: Gem, title: cleanText(loja.diferencial_1) || "Curadoria delicada" },
+    { icon: Gift, title: cleanText(loja.diferencial_2) || "Ideal para presentes" },
+    { icon: HeartHandshake, title: cleanText(loja.diferencial_3) || "Atendimento próximo" }
+  ].filter((item) => item.title);
 
   return (
     <AnimatedReveal id="sobre" className="relative overflow-hidden bg-[radial-gradient(circle_at_12%_18%,rgba(215,174,74,0.08),transparent_28%),linear-gradient(135deg,#FAF6EF_0%,#F5EDE2_52%,#EFE3D4_100%)] px-[22px] py-20 lg:px-[clamp(40px,7vw,120px)] lg:py-24">
@@ -32,9 +33,11 @@ export function StoreStorySection({ loja }: { loja: Loja }) {
           <span className="mt-7 block h-px w-28 bg-[#C9A24D]/65" />
           <p className="mt-7 max-w-[560px] text-[17px] leading-[1.85] text-[#6F6258]">{story}</p>
 
-          <div className="mt-7 max-w-[620px] rounded-[26px] border border-[#C9A24D]/18 bg-white/52 p-7 shadow-[0_22px_60px_rgba(80,55,25,0.07)] backdrop-blur-xl lg:p-8">
-            <p className="font-serif text-[26px] font-normal leading-[1.35] text-[#2C241F]">“{style}”</p>
-          </div>
+          {style ? (
+            <div className="mt-7 max-w-[620px] rounded-[26px] border border-[#C9A24D]/18 bg-white/52 p-7 shadow-[0_22px_60px_rgba(80,55,25,0.07)] backdrop-blur-xl lg:p-8">
+              <p className="font-serif text-[26px] font-normal leading-[1.35] text-[#2C241F]">“{style}”</p>
+            </div>
+          ) : null}
 
           <div className="mt-7 grid gap-4 sm:grid-cols-3">
             {values.map((item) => {

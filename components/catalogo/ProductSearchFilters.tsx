@@ -55,8 +55,8 @@ export function ProductSearchFilters({ lojaSlug, whatsapp, categorias, produtos,
         </Select>
         <Select value={order} onChange={(event) => setOrder(event.target.value)}>
           <option value="recentes">Mais recentes</option>
-          <option value="menor-preco">Menor preco</option>
-          <option value="maior-preco">Maior preco</option>
+          <option value="menor-preco">Menor preço</option>
+          <option value="maior-preco">Maior preço</option>
         </Select>
       </div>
 
