@@ -29,7 +29,7 @@ export default function CategoriasPage() {
 
   return (
     <>
-      <DashboardHeader title="Categorias" description="Organize seus produtos para facilitar a navegacao no catalogo." />
+      <DashboardHeader title="Categorias" description="Organize seus produtos para facilitar a navegação no catálogo." />
       {loja ? (
         <div className="grid gap-5 lg:grid-cols-[380px_1fr]">
           <Card className="p-5">
@@ -37,9 +37,18 @@ export default function CategoriasPage() {
             <CategoryForm lojaId={loja.id} onSaved={load} />
           </Card>
           <div className="space-y-4">
-            {categorias.map((categoria) => (
-              <CategoryAdminCard key={categoria.id} categoria={categoria} lojaId={loja.id} onChanged={load} />
-            ))}
+            {categorias.length ? (
+              categorias.map((categoria) => (
+                <CategoryAdminCard key={categoria.id} categoria={categoria} lojaId={loja.id} onChanged={load} />
+              ))
+            ) : (
+              <Card className="p-8 text-center">
+                <h2 className="font-serif text-3xl text-preto">Nenhuma categoria cadastrada ainda</h2>
+                <p className="mx-auto mt-2 max-w-xl text-sm leading-6 text-texto">
+                  Crie categorias para organizar melhor sua vitrine e facilitar a navegação das clientes.
+                </p>
+              </Card>
+            )}
           </div>
         </div>
       ) : null}

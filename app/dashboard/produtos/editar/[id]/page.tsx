@@ -21,8 +21,8 @@ export default async function EditarProdutoPage({ params }: { params: { id: stri
 
   return (
     <>
-      <DashboardHeader title="Editar produto" description="Atualize informacoes, fotos e status do produto." />
-      <ProductForm lojaId={loja.id} categorias={(categorias ?? []) as Categoria[]} produto={produto as Produto} />
+      <DashboardHeader title="Editar produto" description="Atualize informações, fotos e status do produto." />
+      <ProductForm lojaId={loja.id} lojaSlug={loja.slug} categorias={(categorias ?? []) as Categoria[]} produto={produto as Produto} />
     </>
   );
 }

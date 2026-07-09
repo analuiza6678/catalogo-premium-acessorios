@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Edit, Trash2 } from "lucide-react";
+import Image from "next/image";
+import { Edit, ImageIcon, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -37,9 +38,15 @@ export function CategoryAdminCard({ categoria, lojaId, onChanged }: CategoryAdmi
     <>
       <Card className="p-5">
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <h3 className="font-serif text-2xl text-preto">{categoria.nome}</h3>
-            <p className="mt-1 text-sm text-texto">/{categoria.slug}</p>
+          <div className="flex min-w-0 gap-3">
+            <div className="relative grid size-14 shrink-0 place-items-center overflow-hidden rounded-2xl bg-bege text-dourado">
+              {categoria.imagem_url ? <Image src={categoria.imagem_url} alt={categoria.nome} fill className="object-cover" /> : <ImageIcon size={21} />}
+            </div>
+            <div>
+              <h3 className="font-serif text-2xl text-preto">{categoria.nome}</h3>
+              <p className="mt-1 text-sm text-texto">/{categoria.slug} • Ordem {categoria.ordem ?? 0}</p>
+              {categoria.icone ? <p className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-dourado">Ícone: {categoria.icone}</p> : null}
+            </div>
           </div>
           <Badge className={active ? "bg-rosa-bebe" : "bg-gray-100"}>{active ? "Ativa" : "Inativa"}</Badge>
         </div>

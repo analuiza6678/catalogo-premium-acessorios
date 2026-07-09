@@ -17,7 +17,7 @@ export default async function PerfilPage() {
 
   return (
     <>
-      <DashboardHeader title="Perfil da loja" description="Atualize a identidade, contato, imagens e status do catalogo." />
+      <DashboardHeader title="Perfil da loja" description="Atualize a identidade, contato, imagens e status do catálogo." />
       <StoreProfileForm loja={loja as Loja} activeCategories={activeCategories ?? 0} activeProducts={activeProducts ?? 0} />
     </>
   );

@@ -19,18 +19,26 @@ export function buildCartMessage(items: CartItem[]) {
     lines.push(
       `${index + 1}. Produto: ${item.nome}`,
       `   Quantidade: ${item.quantidade}`,
-      `   Valor unitario: ${formatPrice(item.preco)}`,
+      `   Valor unitário: ${formatPrice(item.preco)}`,
       `   Subtotal: ${formatPrice(subtotal)}`,
       ""
     );
   });
 
   const total = items.reduce((sum, item) => sum + item.preco * item.quantidade, 0);
-  lines.push(`Total do pedido: ${formatPrice(total)}`, "", "Aguardo confirmacao.");
+  lines.push(`Total do pedido: ${formatPrice(total)}`, "", "Aguardo confirmação.");
   return lines.join("\n");
 }
 
 export function buildSingleProductMessage(produto: Produto, url: string, quantidade = 1) {
+  if (produto.whatsapp_mensagem) {
+    const price = produto.preco_promocional ?? produto.preco;
+    return produto.whatsapp_mensagem
+      .replaceAll("{{nome}}", produto.nome)
+      .replaceAll("{{preço}}", formatPrice(price))
+      .replaceAll("{{preco}}", formatPrice(price))
+      .replaceAll("{{link}}", url);
+  }
   const price = produto.preco_promocional ?? produto.preco;
   return [
     "Ola! Tenho interesse neste produto:",
@@ -40,7 +48,7 @@ export function buildSingleProductMessage(produto: Produto, url: string, quantid
     `Valor: ${formatPrice(price)}`,
     `Link: ${url}`,
     "",
-    "Aguardo confirmacao."
+    "Aguardo confirmação."
   ].join("\n");
 }
 

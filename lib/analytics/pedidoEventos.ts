@@ -6,19 +6,25 @@ type PedidoEventoInput = {
   lojaId: string;
   origem: "carrinho" | "produto";
   itens: Array<{ id: string; nome: string; slug: string; preco: number; quantidade: number; imagem_url: string | null }>;
+  eventType?: "click_whatsapp" | "view_product" | "view_catalog" | "click_share_catalog" | "click_product_image";
+  metadata?: Record<string, unknown>;
 };
 
-export async function recordPedidoEvento({ lojaId, origem, itens }: PedidoEventoInput) {
+export async function recordPedidoEvento({ lojaId, origem, itens, eventType = "click_whatsapp", metadata = {} }: PedidoEventoInput) {
   const total = itens.reduce((sum, item) => sum + item.preco * item.quantidade, 0);
+  const firstItem = itens[0];
   const { error } = await createClient().from("pedido_eventos").insert({
     loja_id: lojaId,
     origem,
     itens,
-    total
+    total,
+    event_type: eventType,
+    produto_id: firstItem?.id ?? null,
+    metadata
   });
 
   if (error) {
-    console.warn("Pedido pelo WhatsApp nao registrado no painel:", error.message);
+    console.warn("Pedido pelo WhatsApp não registrado no painel:", error.message);
   }
 }
 

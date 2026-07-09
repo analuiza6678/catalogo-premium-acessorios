@@ -29,4 +29,11 @@ export type Loja = {
   horario_atendimento?: string | null;
   link_maps?: string | null;
   tipo_atendimento?: string | null;
+  cor_fundo?: string | null;
+  cor_botoes?: string | null;
+  cor_texto?: string | null;
+  formas_entrega?: string | null;
+  formas_pagamento?: string | null;
+  politica_troca?: string | null;
+  prazo_envio?: string | null;
 };

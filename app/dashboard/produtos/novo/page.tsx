@@ -15,7 +15,7 @@ export default async function NovoProdutoPage() {
   return (
     <>
       <DashboardHeader title="Novo produto" description="Preencha os dados do produto e envie uma imagem principal." />
-      <ProductForm lojaId={loja.id} categorias={(categorias ?? []) as Categoria[]} />
+      <ProductForm lojaId={loja.id} lojaSlug={loja.slug} categorias={(categorias ?? []) as Categoria[]} />
     </>
   );
 }

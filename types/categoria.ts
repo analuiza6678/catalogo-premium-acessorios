@@ -6,5 +6,7 @@ export type Categoria = {
   descricao: string | null;
   ativa: boolean;
   ordem: number;
+  imagem_url?: string | null;
+  icone?: string | null;
   created_at: string;
 };
