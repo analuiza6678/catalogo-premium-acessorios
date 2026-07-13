@@ -33,6 +33,29 @@ const imageHelp = {
   dona: "Foto da dona/fundadora. Recomendado: imagem vertical com rosto bem iluminado. JPG, PNG ou WEBP até 5MB."
 };
 
+function getProfileSaveErrorMessage(error: unknown) {
+  const text = error instanceof Error ? error.message : "Não foi possível concluir esta ação. Tente novamente.";
+  const lower = text.toLowerCase();
+
+  if (lower.includes("mime") || lower.includes("5mb")) {
+    return "Não foi possível enviar a imagem. Verifique o formato e tamanho.";
+  }
+
+  if (lower.includes("schema cache") || lower.includes("could not find") || lower.includes("column")) {
+    return "O banco de dados do Supabase ainda não tem todos os campos novos do catálogo. Rode o SQL de atualização no Supabase e tente salvar novamente.";
+  }
+
+  if (lower.includes("duplicate") || lower.includes("lojas_slug_key")) {
+    return "Este link da loja já está em uso. Escolha outro slug.";
+  }
+
+  if (lower.includes("row-level security") || lower.includes("permission denied")) {
+    return "Seu usuário não tem permissão para alterar esta loja. Verifique se está logada com a conta dona do catálogo.";
+  }
+
+  return text;
+}
+
 export function StoreProfileForm({ loja, activeCategories, activeProducts }: StoreProfileFormProps) {
   const [logo, setLogo] = useState<File[]>([]);
   const [capa, setCapa] = useState<File[]>([]);
@@ -184,9 +207,9 @@ export function StoreProfileForm({ loja, activeCategories, activeProducts }: Sto
       setMessage("Loja atualizada com sucesso.");
       toast.success("Loja atualizada com sucesso.");
     } catch (error) {
-      const text = error instanceof Error ? error.message : "Não foi possível concluir esta ação. Tente novamente.";
-      setMessage(text.includes("mime") || text.includes("5MB") ? "Não foi possível enviar a imagem. Verifique o formato e tamanho." : text);
-      toast.error(text.includes("mime") || text.includes("5MB") ? "Não foi possível enviar a imagem. Verifique o formato e tamanho." : "Não foi possível concluir esta ação.");
+      const text = getProfileSaveErrorMessage(error);
+      setMessage(text);
+      toast.error(text);
     } finally {
       setLoading(false);
     }
