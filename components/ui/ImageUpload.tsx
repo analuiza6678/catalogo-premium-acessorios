@@ -44,7 +44,7 @@ export function ImageUpload({ label, currentUrl, helpText, aspectClassName = "as
 
       {imageUrl ? (
         <div className={`relative mb-3 overflow-hidden rounded-2xl bg-white ${aspectClassName}`}>
-          <Image src={imageUrl} alt={label} fill className="object-cover" />
+          <Image src={imageUrl} alt={label} fill quality={100} sizes="(min-width: 1024px) 520px, 92vw" className="object-cover" />
         </div>
       ) : (
         <div className={`mb-3 grid place-items-center rounded-2xl border border-dourado/15 bg-white/70 text-xs text-texto/55 ${aspectClassName}`}>

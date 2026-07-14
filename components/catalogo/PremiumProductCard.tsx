@@ -43,7 +43,7 @@ export function PremiumProductCard({ lojaSlug, produto, preview, compact }: Prem
     <motion.article whileHover={hoverLift} className={`group overflow-hidden rounded-[34px] border border-white/80 bg-white/80 p-3 shadow-[0_24px_75px_rgba(58,42,36,0.10)] backdrop-blur ${isKit ? "bg-[#F8DDEB]/45" : ""}`}>
       <div className={`relative overflow-hidden rounded-[28px] bg-[#FAF3E8] ${compact ? "aspect-[5/4]" : "aspect-[4/5]"}`}>
         {produto.imagem_url ? (
-          <Image src={produto.imagem_url} alt={productName(produto.nome)} fill className="object-cover transition duration-700 group-hover:scale-110" />
+          <Image src={produto.imagem_url} alt={productName(produto.nome)} fill quality={96} sizes={compact ? "(min-width: 1024px) 24vw, 90vw" : "(min-width: 1024px) 42vw, 90vw"} className="object-cover transition duration-700 group-hover:scale-110" />
         ) : (
           <div className="grid h-full place-items-center bg-[linear-gradient(135deg,#F8DDEB,#FAF7F2)] text-dourado">
             <Sparkles size={34} />

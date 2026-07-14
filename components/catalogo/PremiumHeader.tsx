@@ -27,7 +27,7 @@ export function PremiumHeader({ loja, showKits = true }: { loja: Loja; showKits?
         <Link href={`/${loja.slug}/shop`} className="flex min-w-0 items-center gap-3 lg:gap-4">
           <span className="relative grid size-10 shrink-0 place-items-center overflow-hidden rounded-full border border-[#C9A24D]/75 bg-[#FAF6EF]/72 text-[#B88A2A] shadow-[0_10px_24px_rgba(201,162,77,0.09)] lg:size-[56px] lg:shadow-[0_12px_32px_rgba(201,162,77,0.10)]">
             {loja.logo_url ? (
-              <Image src={loja.logo_url} alt={loja.nome} fill className="object-cover" />
+              <Image src={loja.logo_url} alt={loja.nome} fill quality={100} sizes="56px" className="object-cover" />
             ) : (
               <span className="font-serif text-[20px] leading-none lg:text-[28px]">M</span>
             )}

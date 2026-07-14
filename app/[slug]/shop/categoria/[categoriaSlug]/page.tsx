@@ -12,7 +12,8 @@ import type { Categoria } from "@/types/categoria";
 import type { Loja } from "@/types/loja";
 import type { Produto } from "@/types/produto";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: { params: { slug: string; categoriaSlug: string } }): Promise<Metadata> {
   if (!hasSupabaseEnv()) return { title: "Categoria" };

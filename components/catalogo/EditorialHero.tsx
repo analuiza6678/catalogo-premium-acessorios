@@ -29,8 +29,8 @@ export function EditorialHero({ loja }: { loja: Loja; products: Produto[] }) {
           transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
           className="absolute inset-0 z-[1] h-full w-full"
         >
-          <Image src={mobileCover} alt={`Coleção ${loja.nome}`} fill priority sizes="100vw" className="object-cover object-[72%_center] opacity-70 lg:hidden" />
-          <Image src={desktopCover} alt={`Coleção ${loja.nome}`} fill priority sizes="100vw" className="hidden object-cover object-top lg:block" />
+          <Image src={mobileCover} alt={`Coleção ${loja.nome}`} fill priority quality={100} sizes="100vw" className="object-cover object-[72%_center] opacity-70 lg:hidden" />
+          <Image src={desktopCover} alt={`Coleção ${loja.nome}`} fill priority quality={100} sizes="100vw" className="hidden object-cover object-top lg:block" />
         </motion.div>
 
         <div className="pointer-events-none absolute inset-0 z-[2] bg-[linear-gradient(90deg,rgba(250,246,239,0.94)_0%,rgba(250,246,239,0.84)_42%,rgba(250,246,239,0.46)_72%,rgba(250,246,239,0.28)_100%)] lg:bg-[linear-gradient(90deg,rgba(250,246,239,0.34)_0%,rgba(250,246,239,0.22)_32%,rgba(250,246,239,0.06)_48%,rgba(250,246,239,0)_62%,rgba(250,246,239,0)_100%)]" />

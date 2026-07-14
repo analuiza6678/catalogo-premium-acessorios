@@ -44,7 +44,7 @@ export function ProductDetails({ loja, produto }: ProductDetailsProps) {
     <section className="mx-auto grid max-w-6xl gap-8 px-4 py-8 lg:grid-cols-[1.08fr_0.92fr] lg:py-14">
       <div>
         <div className="relative aspect-[4/5] overflow-hidden rounded-[32px] bg-bege shadow-soft">
-          {selectedImage ? <Image src={selectedImage} alt={produto.nome} fill priority sizes="(min-width: 1024px) 52vw, 100vw" className="object-cover" /> : null}
+          {selectedImage ? <Image src={selectedImage} alt={produto.nome} fill priority quality={96} sizes="(min-width: 1024px) 52vw, 100vw" className="object-cover" /> : null}
         </div>
         {images.length > 1 ? (
           <div className="scrollbar-none mt-4 flex gap-3 overflow-x-auto">
@@ -54,7 +54,7 @@ export function ProductDetails({ loja, produto }: ProductDetailsProps) {
                 onClick={() => setSelectedImage(image)}
                 className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl border ${selectedImage === image ? "border-dourado" : "border-rosa-bebe"}`}
               >
-                <Image src={image} alt={produto.nome} fill sizes="80px" className="object-cover" />
+                <Image src={image} alt={produto.nome} fill quality={96} sizes="80px" className="object-cover" />
               </button>
             ))}
           </div>

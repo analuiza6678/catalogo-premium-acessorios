@@ -28,7 +28,7 @@ export function ProductCard({ lojaSlug, produto, large }: ProductCardProps) {
     <article className="group animate-fadeUp overflow-hidden rounded-[26px] border border-rosa-bebe/70 bg-white p-3 shadow-soft transition duration-300 hover:-translate-y-1 hover:shadow-gold">
       <Link href={`/${lojaSlug}/shop/produto/${produto.slug}`} className={`relative block overflow-hidden rounded-[20px] bg-bege ${large ? "aspect-[4/5]" : "aspect-[4/5]"}`}>
         {produto.imagem_url ? (
-          <Image src={produto.imagem_url} alt={productName(produto.nome)} fill className="object-cover transition duration-500 group-hover:scale-105" />
+          <Image src={produto.imagem_url} alt={productName(produto.nome)} fill quality={96} sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-105" />
         ) : (
           <div className="grid h-full place-items-center bg-rosa-bebe text-sm text-texto">Sem imagem</div>
         )}

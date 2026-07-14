@@ -293,6 +293,7 @@ function DesktopProductCard({ lojaSlug, product, preview }: { lojaSlug: string; 
               src={product.imagem_url}
               alt={product.nome}
               fill
+              quality={96}
               sizes="(min-width: 1280px) 30vw, (min-width: 768px) 45vw, 100vw"
               className="object-cover object-center transition duration-700 group-hover:scale-110"
             />
@@ -343,7 +344,7 @@ function MobileProductCard({ lojaSlug, product, preview }: { lojaSlug: string; p
   return (
     <motion.article variants={fadeInUp} whileTap={{ scale: 0.99 }} className="relative grid min-h-[140px] grid-cols-[42%_58%] overflow-hidden rounded-[18px] border border-[#C9A24D]/14 bg-white/82 shadow-[0_12px_28px_rgba(80,55,25,0.07)]">
       <Link href={href} className="relative block bg-[#EADBC8]">
-        {product.imagem_url ? <Image src={product.imagem_url} alt={product.nome} fill sizes="42vw" className="object-cover" /> : null}
+        {product.imagem_url ? <Image src={product.imagem_url} alt={product.nome} fill quality={96} sizes="42vw" className="object-cover" /> : null}
         {badge ? <span className="absolute left-2.5 top-2.5 rounded-full border border-[#C9A24D]/20 bg-white/90 px-2.5 py-0.5 text-[10px] font-bold text-[#B8841F] shadow-sm">{badge}</span> : null}
       </Link>
       <div className="relative p-3 pr-3">

@@ -14,7 +14,8 @@ import { productDescription, productName } from "@/lib/catalog/productDisplay";
 import type { Loja } from "@/types/loja";
 import type { Produto } from "@/types/produto";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: { params: { slug: string; produtoSlug: string } }): Promise<Metadata> {
   if (!hasSupabaseEnv()) return { title: "Produto" };
