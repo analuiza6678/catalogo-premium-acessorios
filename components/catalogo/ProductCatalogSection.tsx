@@ -214,15 +214,15 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
           </div>
         )}
 
-        <motion.div variants={fadeInUp} className="mt-10 grid gap-4 rounded-[18px] border border-[#C9A24D]/20 bg-white/58 p-5 shadow-[0_18px_45px_rgba(80,55,25,0.07)] backdrop-blur lg:grid-cols-4 lg:gap-0 lg:p-0">
+        <motion.div variants={fadeInUp} className="mt-7 grid grid-cols-2 gap-2 rounded-[16px] border border-[#C9A24D]/16 bg-white/54 p-3 shadow-[0_12px_30px_rgba(80,55,25,0.05)] backdrop-blur lg:mt-10 lg:grid-cols-4 lg:gap-0 lg:p-0 lg:shadow-[0_18px_45px_rgba(80,55,25,0.07)]">
           {benefits.map((item, index) => {
             const Icon = item.icon;
             return (
-              <div key={item.title} className={`flex items-center gap-4 px-4 py-3 lg:px-8 lg:py-5 ${index > 0 ? "lg:border-l lg:border-[#C9A24D]/20" : ""}`}>
-                <Icon size={34} className="shrink-0 text-[#B88A2A]" strokeWidth={1.4} />
-                <div>
-                  <p className="text-sm font-bold text-[#1E1D1B]">{item.title}</p>
-                  <p className="mt-1 text-xs leading-5 text-[#6F6258]">{item.text}</p>
+              <div key={item.title} className={`flex items-start gap-2 rounded-xl bg-[#FAF6EF]/60 p-3 lg:rounded-none lg:bg-transparent lg:px-8 lg:py-5 ${index > 0 ? "lg:border-l lg:border-[#C9A24D]/20" : ""}`}>
+                <Icon size={22} className="mt-0.5 shrink-0 text-[#B88A2A] lg:size-[34px]" strokeWidth={1.45} />
+                <div className="min-w-0">
+                  <p className="text-[12px] font-bold leading-tight text-[#1E1D1B] lg:text-sm">{item.title}</p>
+                  <p className="mt-1 hidden text-xs leading-5 text-[#6F6258] lg:block">{item.text}</p>
                 </div>
               </div>
             );

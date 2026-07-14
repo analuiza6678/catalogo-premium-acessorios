@@ -23,16 +23,16 @@ export function PremiumHeader({ loja, showKits = true }: { loja: Loja; showKits?
 
   return (
     <header className="sticky top-0 z-40 bg-[#FAF6EF]/58">
-      <div className="flex h-16 w-full items-center justify-between gap-3 px-4 sm:px-5 lg:h-[78px] lg:gap-6 lg:px-[clamp(28px,5vw,96px)]">
-        <Link href={`/${loja.slug}/shop`} className="flex min-w-0 items-center gap-3 lg:gap-4">
-          <span className="relative grid size-10 shrink-0 place-items-center overflow-hidden rounded-full border border-[#C9A24D]/75 bg-[#FAF6EF]/72 text-[#B88A2A] shadow-[0_10px_24px_rgba(201,162,77,0.09)] lg:size-[56px] lg:shadow-[0_12px_32px_rgba(201,162,77,0.10)]">
+      <div className="flex h-14 w-full items-center justify-between gap-3 px-4 sm:h-16 sm:px-5 lg:h-[78px] lg:gap-6 lg:px-[clamp(28px,5vw,96px)]">
+        <Link href={`/${loja.slug}/shop`} className="flex min-w-0 items-center gap-2.5 lg:gap-4">
+          <span className="relative grid size-9 shrink-0 place-items-center overflow-hidden rounded-full border border-[#C9A24D]/75 bg-[#FAF6EF]/72 text-[#B88A2A] shadow-[0_8px_18px_rgba(201,162,77,0.08)] sm:size-10 lg:size-[56px] lg:shadow-[0_12px_32px_rgba(201,162,77,0.10)]">
             {loja.logo_url ? (
               <Image src={loja.logo_url} alt={loja.nome} fill quality={100} sizes="56px" className="object-cover" />
             ) : (
-              <span className="font-serif text-[20px] leading-none lg:text-[28px]">M</span>
+              <span className="font-serif text-[18px] leading-none sm:text-[20px] lg:text-[28px]">M</span>
             )}
           </span>
-          <span className="truncate font-serif text-[24px] font-normal leading-none text-[#B88A2A] lg:text-[32px]">{loja.nome}</span>
+          <span className="truncate font-serif text-[21px] font-normal leading-none text-[#B88A2A] sm:text-[24px] lg:text-[32px]">{loja.nome}</span>
         </Link>
 
         <nav className="hidden items-center gap-[clamp(34px,3.2vw,58px)] text-[16px] font-medium text-[#1E1D1B]/88 lg:flex">
@@ -63,7 +63,7 @@ export function PremiumHeader({ loja, showKits = true }: { loja: Loja; showKits?
           ) : null}
 
           <button
-            className="grid size-10 place-items-center rounded-full border border-[#C9A24D]/45 bg-white/70 text-[#1E1D1B] lg:hidden"
+            className="grid size-9 place-items-center rounded-full border border-[#C9A24D]/45 bg-white/70 text-[#1E1D1B] sm:size-10 lg:hidden"
             onClick={() => setOpen(!open)}
             aria-label="Abrir menu"
             type="button"
