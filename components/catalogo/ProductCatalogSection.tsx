@@ -14,6 +14,8 @@ import { buildWhatsappUrl } from "@/lib/utils/whatsapp";
 import { hasPromo, isLowStock, isOutOfStock, productBadge, productDescription, productName, productPrice } from "@/lib/catalog/productDisplay";
 import type { Categoria } from "@/types/categoria";
 import type { Produto } from "@/types/produto";
+import type { StoreSectionContent } from "@/types/store-section";
+import { defaultSectionContent } from "@/types/store-section";
 
 type ProductCatalogSectionProps = {
   lojaSlug: string;
@@ -21,6 +23,7 @@ type ProductCatalogSectionProps = {
   products: Produto[];
   preview?: boolean;
   whatsapp?: string | null;
+  content?: StoreSectionContent;
 };
 
 const benefits = [
@@ -30,7 +33,8 @@ const benefits = [
   { title: "Atendimento humanizado", text: "Estamos aqui para você", icon: BadgeCheck }
 ];
 
-export function ProductCatalogSection({ lojaSlug, categories, products, preview, whatsapp }: ProductCatalogSectionProps) {
+export function ProductCatalogSection({ lojaSlug, categories, products, preview, whatsapp, content }: ProductCatalogSectionProps) {
+  const section = { ...defaultSectionContent.products, ...content };
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
   const [type, setType] = useState("");
@@ -80,7 +84,7 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
         <motion.div variants={fadeInUp} className="grid gap-4 lg:grid-cols-[1fr_460px] lg:items-start lg:gap-8">
           <div>
             <h2 className="font-serif text-[34px] font-normal leading-none tracking-[-0.03em] text-[#1E1D1B] lg:text-[clamp(56px,5vw,84px)] lg:tracking-[-0.035em]">
-              Escolha suas peças favoritas
+              {section.title}
             </h2>
             <div className="mt-4 flex max-w-[220px] items-center gap-3 lg:mt-7 lg:max-w-[420px]">
               <span className="h-px flex-1 bg-[#C9A24D]/50" />
@@ -90,7 +94,7 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
           </div>
 
           <p className="max-w-[420px] text-sm leading-6 text-[#6F6258] lg:max-w-[460px] lg:pt-3 lg:text-[17px] lg:leading-[1.7]">
-            Monte seu pedido, adicione à sacola e finalize pelo WhatsApp com atendimento personalizado.
+            {section.description}
           </p>
         </motion.div>
 
@@ -114,7 +118,7 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
             <input
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Buscar por nome ou palavra-chave"
+              placeholder={section.searchPlaceholder}
               className="h-12 w-full rounded-xl border border-[#C9A24D]/20 bg-white/72 pl-10 pr-3 text-sm text-[#4A403A] outline-none transition placeholder:text-[#9C9088] focus:border-[#C9A24D]/60 focus:shadow-[0_0_0_4px_rgba(201,162,77,0.10)] lg:h-14 lg:pl-12 lg:pr-4"
             />
           </label>
@@ -193,12 +197,12 @@ export function ProductCatalogSection({ lojaSlug, categories, products, preview,
               <ShoppingBag size={24} strokeWidth={1.5} />
             </span>
             <h3 className="mt-5 font-serif text-[clamp(32px,4vw,48px)] leading-none text-[#1E1D1B]">
-              {hasProducts ? "Nenhuma peça encontrada" : "Novas peças em breve"}
+              {hasProducts ? "Nenhuma peça encontrada" : section.emptyTitle}
             </h3>
             <p className="mx-auto mt-4 max-w-xl text-[16px] leading-7 text-[#6F6258]">
               {hasProducts
                 ? "Ajuste os filtros ou limpe a busca para encontrar outras peças da coleção."
-                : "Estamos preparando uma seleção especial de acessórios. Fale pelo WhatsApp para acompanhar os lançamentos."}
+                : section.emptyText}
             </p>
             {hasProducts ? (
               <Button type="button" variant="secondary" onClick={() => { setSearch(""); setCategory(""); setType(""); }} className="mt-7 rounded-full">

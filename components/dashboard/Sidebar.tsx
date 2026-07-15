@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Home, LogOut, Package, Settings, Sparkles, Tags } from "lucide-react";
+import { Home, LayoutTemplate, LogOut, Package, Palette, Settings, Sparkles, Tags } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 const items = [
   { href: "/dashboard", label: "Visão geral", icon: Home },
   { href: "/dashboard/produtos", label: "Produtos", icon: Package },
   { href: "/dashboard/categorias", label: "Categorias", icon: Tags },
+  { href: "/dashboard/vitrine", label: "Editar vitrine", icon: LayoutTemplate },
+  { href: "/dashboard/aparencia", label: "Aparência", icon: Palette },
   { href: "/dashboard/perfil", label: "Perfil da loja", icon: Settings }
 ];
 

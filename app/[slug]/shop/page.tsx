@@ -8,6 +8,8 @@ import { createPublicClient } from "@/lib/supabase/public";
 import type { Categoria } from "@/types/categoria";
 import type { Loja } from "@/types/loja";
 import type { Produto } from "@/types/produto";
+import type { StoreSection } from "@/types/store-section";
+import type { StoreTheme } from "@/types/store-theme";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -55,7 +57,7 @@ export default async function ShopPage({ params }: { params: { slug: string } })
   if (lojaError && lojaError.code !== "PGRST116") return <SupabaseError message={lojaError.message} />;
   if (!loja) notFound();
 
-  const [{ data: categorias }, { data: produtos }] = await Promise.all([
+  const [{ data: categorias }, { data: produtos }, { data: theme }, { data: sections }] = await Promise.all([
     supabase.from("categorias").select("*").eq("loja_id", loja.id).eq("ativa", true).order("ordem"),
     supabase
       .from("produtos")
@@ -64,8 +66,18 @@ export default async function ShopPage({ params }: { params: { slug: string } })
       .eq("ativo", true)
       .order("destaque", { ascending: false })
       .order("ordem")
-      .order("created_at", { ascending: false })
+      .order("created_at", { ascending: false }),
+    supabase.from("store_theme").select("*").eq("loja_id", loja.id).maybeSingle(),
+    supabase.from("store_sections").select("*").eq("loja_id", loja.id).eq("enabled", true).order("position")
   ]);
 
-  return <PremiumShopPage loja={loja as Loja} categorias={(categorias ?? []) as Categoria[]} produtos={(produtos ?? []) as Produto[]} />;
+  return (
+    <PremiumShopPage
+      loja={loja as Loja}
+      categorias={(categorias ?? []) as Categoria[]}
+      produtos={(produtos ?? []) as Produto[]}
+      theme={(theme ?? null) as StoreTheme | null}
+      sections={(sections ?? []) as StoreSection[]}
+    />
+  );
 }
